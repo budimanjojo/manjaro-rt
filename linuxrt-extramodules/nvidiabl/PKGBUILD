@@ -1,7 +1,7 @@
 # Maintainer: Philip Müller <philm@manjarolinux.org>
 # Co-Maintainer: Guinux <nuxgui@gmail.com>
 
-pkgname=linux44-nvidiabl
+pkgname=linuxrt-nvidiabl
 _pkgname=nvidiabl
 pkgver=0.88
 pkgrel=13
@@ -19,7 +19,7 @@ groups=('linux44-extramodules')
 options=()
 install=nvidiabl.install
 changelog=
-_extramodules=extramodules-4.4-MANJARO
+_extramodules=extramodules-4.4-rt-MANJARO
 _kernver="$(cat /usr/lib/modules/${_extramodules}/version)"
 
 source=(https://github.com/guillaumezin/nvidiabl/archive/master.zip 
@@ -43,7 +43,7 @@ package() {
   install -d $MODPATH
   install -m 644 -c nvidiabl.ko $MODPATH
   sed -i -e "s/EXTRAMODULES='.*'/EXTRAMODULES='${_extramodules}'/" "${startdir}/nvidiabl.install"
-  sed -i -e "s/VERSION='.*'/VERSION='linux44'/" "${startdir}/nvidiabl.install"
+  sed -i -e "s/VERSION='.*'/VERSION='linuxrt'/" "${startdir}/nvidiabl.install"
 }
 
 # vim:set ts=2 sw=2 et:

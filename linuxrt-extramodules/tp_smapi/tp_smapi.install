@@ -1,4 +1,4 @@
-extramodules=/usr/lib/modules/extramodules-4.4-MANJARO
+extramodules=/usr/lib/modules/extramodules-4.4-rt-MANJARO
 
 post_install() {
   depmod -v $(< "$extramodules/version") &>/dev/null

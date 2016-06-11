@@ -7,7 +7,7 @@
 # Maintainer: Guinux <guillaume@manjaro.org>
 # Maintainer: Rob McCathie <rob@manjaro.org>
 
-pkgname=linux44-r8168
+pkgname=linuxrt-r8168
 _pkgname=r8168
 pkgver=8.040.00
 pkgrel=13
@@ -15,16 +15,16 @@ pkgdesc="A kernel module for Realtek 8168 network cards"
 url="http://www.realtek.com.tw"
 license=("GPL")
 arch=('i686' 'x86_64')
-depends=('glibc' 'linux44')
-makedepends=('linux44-headers')
+depends=('glibc' 'linuxrt')
+makedepends=('linuxrt-headers')
 provides=("$_pkgname=$pkgver")
-groups=('linux44-extramodules')
+groups=('linuxrt-extramodules')
 source=("https://github.com/mtorromeo/r8168/archive/$pkgver/$pkgname-$pkgver.tar.gz")
 sha256sums=('1f7aad3a066c152837e03e558ba720742e792d281c96c5412cff32d68875415b')
 install=$_pkgname.install
 
 build() {
-	_extramodules=extramodules-4.4-MANJARO
+	_extramodules=extramodules-4.4-rt-MANJARO
 	_kernver="$(cat /usr/lib/modules/$_extramodules/version || true)"
 	cd "$_pkgname-$pkgver"
 
@@ -37,7 +37,7 @@ build() {
 }
 
 package() {
-	_extramodules=extramodules-4.4-MANJARO
+	_extramodules=extramodules-4.4-rt-MANJARO
 	cd "$srcdir/$_pkgname-$pkgver/src"
 	install -D -m644 $_pkgname.ko "$pkgdir/usr/lib/modules/$_extramodules/$_pkgname.ko"
 

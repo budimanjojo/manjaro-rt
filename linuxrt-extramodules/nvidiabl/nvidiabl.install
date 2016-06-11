@@ -1,5 +1,5 @@
-EXTRAMODULES='extramodules-4.4-MANJARO'
-VERSION='linux44'
+EXTRAMODULES='extramodules-4.4-rt-MANJARO'
+VERSION='linuxrt'
 
 post_install() {
     depmod $(cat /usr/lib/modules/$EXTRAMODULES/version)

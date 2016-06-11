@@ -2,8 +2,8 @@
 # Maintainer: Roland Singer <roland[at]manjaro[dog]org>
 
 
-_linuxprefix=linux44
-_extramodules=extramodules-4.4-MANJARO
+_linuxprefix=linuxrt
+_extramodules=extramodules-4.4-rt-MANJARO
 pkgname=$_linuxprefix-catalyst
 _pkgname=catalyst
 pkgver=15.201.1151

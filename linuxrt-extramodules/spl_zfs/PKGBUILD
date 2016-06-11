@@ -1,18 +1,18 @@
 # Maintainer: Jesus Alvarez <jeezusjr at gmail dot com>
 # Contributor: Kyle Fuller <inbox at kylefuller dot co dot uk>
 
-pkgbase=linux44-spl_zfs
-pkgname=('linux44-spl' 'linux44-zfs')
+pkgbase=linuxrt-spl_zfs
+pkgname=('linuxrt-spl' 'linuxrt-zfs')
 pkgver=0.6.5.7
 pkgrel=3
 url="http://zfsonlinux.org/"
 arch=('i686' 'x86_64')
 license=("CDDL")
-depends=('linux44')
+depends=('linuxrt')
 makedepends=("spl-dkms>=$pkgver" "zfs-dkms>=$pkgver"
              'dkms'
-             'linux44' 'linux44-headers')
-groups=('linux44-extramodules')
+             'linuxrt' 'linuxrt-headers')
+groups=('linuxrt-extramodules')
 install=install
 
 prepare() {
@@ -22,7 +22,7 @@ prepare() {
 }
 
 build() {
-  _extraver=extramodules-4.4-MANJARO
+  _extraver=extramodules-4.4-rt-MANJARO
   _kernver="$(cat /usr/lib/modules/${_extraver}/version)"
 
   # build host modules
@@ -31,13 +31,13 @@ build() {
   dkms --dkmsframework dkms.conf build "zfs/$pkgver" -k "$_kernver" --verbose
 }
 
-package_linux44-zfs(){
-  _extraver=extramodules-4.4-MANJARO
+package_linuxrt-zfs(){
+  _extraver=extramodules-4.4-rt-MANJARO
   _kernver="$(cat /usr/lib/modules/${_extraver}/version)"
   _pkgname=zfs
   pkgdesc='Kernel modules for the Zettabyte File System.'
   provides=("$_pkgname=$pkgver")
-  depends=('linux44-spl' "zfs-utils=${pkgver}")
+  depends=('linuxrt-spl' "zfs-utils=${pkgver}")
 
   install -dm755 "$pkgdir/usr/lib/modules/$_extraver"
   cd "dkms/zfs/$pkgver/$_kernver/$CARCH/module"
@@ -46,13 +46,13 @@ package_linux44-zfs(){
   sed -i -e "s/EXTRAMODULES='.*'/EXTRAMODULES='$_extraver'/" "$startdir/install"
 }
 
-package_linux44-spl(){
-  _extraver=extramodules-4.4-MANJARO
+package_linuxrt-spl(){
+  _extraver=extramodules-4.4-rt-MANJARO
   _kernver="$(cat /usr/lib/modules/${_extraver}/version)"
   _pkgname=spl
   pkgdesc='Solaris Porting Layer kernel modules.'
   provides=("$_pkgname=$pkgver")
-  depends=('kmod' 'linux44' "spl-utils=${pkgver}")
+  depends=('kmod' 'linuxrt' "spl-utils=${pkgver}")
 
   install -dm755 "$pkgdir/usr/lib/modules/$_extraver"
   cd "dkms/spl/$pkgver/$_kernver/$CARCH/module"

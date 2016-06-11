@@ -5,8 +5,8 @@
 # Maintainer: Roland Singer <roland@manjaro.org>
 
 
-_linuxprefix=linux44
-_extramodules=extramodules-4.4-MANJARO
+_linuxprefix=linuxrt
+_extramodules=extramodules-4.4-rt-MANJARO
 pkgname=$_linuxprefix-nvidia-340xx
 _pkgname=nvidia
 pkgver=340.96

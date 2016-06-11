@@ -6,19 +6,19 @@
 # Maintainer: Guinux <nuxgui@gmail.com>
 # Co-Maintainer: Clittle <philm@manjarolinux.org>
 
-pkgname=linux44-vhba-module
+pkgname=linuxrt-vhba-module
 _pkgname=vhba-module
 pkgver=20140629
-_extramodules=extramodules-4.4-MANJARO
+_extramodules=extramodules-4.4-rt-MANJARO
 pkgrel=13
 pkgdesc="Kernel module that emulates SCSI devices"
 arch=('i686' 'x86_64')
 url="http://cdemu.sourceforge.net/"
 license=('GPL')
-depends=('linux44')
-makedepends=('linux44-headers')
+depends=('linuxrt')
+makedepends=('linuxrt-headers')
 provides=("$_pkgname=$pkgver")
-groups=('linux44-extramodules')
+groups=('linuxrt-extramodules')
 install=$_pkgname.install
 source=("http://downloads.sourceforge.net/cdemu/$_pkgname-$pkgver.tar.bz2"
         '60-vhba.rules')

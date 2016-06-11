@@ -4,7 +4,7 @@
 # Maintainer: Guinux <guillaume@manjaro.org>
 # Maintainer: Roland Singer <roland@manjaro.org>
 
-pkgname=linux44-broadcom-wl
+pkgname=linuxrt-broadcom-wl
 _pkgname=broadcom-wl
 pkgver=6.30.223.248
 pkgrel=13
@@ -12,11 +12,11 @@ pkgdesc='Broadcom 802.11 Linux STA wireless driver BCM43142.'
 url='https://bbs.archlinux.org/viewtopic.php?id=145884'
 arch=('i686' 'x86_64')
 license=('custom')
-depends=('linux44')
+depends=('linuxrt')
 makedepends=("broadcom-wl-dkms>=$pkgver"
              'dkms'
-             'linux44' 'linux44-headers')
-groups=('linux44-extramodules')
+             'linuxrt' 'linuxrt-headers')
+groups=('linuxrt-extramodules')
 provides=("$_pkgname=$pkgver")
 install=install
 source=(broadcom-wl-dkms.conf)
@@ -36,7 +36,7 @@ prepare() {
 }
 
 build() {
-  _extraver=extramodules-4.4-MANJARO
+  _extraver=extramodules-4.4-rt-MANJARO
   _kernver="$(cat /usr/lib/modules/${_extraver}/version)"
 
   # build host modules
@@ -44,8 +44,8 @@ build() {
   dkms --dkmsframework dkms.conf build "broadcom-wl/$pkgver" -k "$_kernver"
 }
 
-package_linux44-broadcom-wl(){
-  _extraver=extramodules-4.4-MANJARO
+package_linuxrt-broadcom-wl(){
+  _extraver=extramodules-4.4-rt-MANJARO
   _kernver="$(cat /usr/lib/modules/${_extraver}/version)"
   depends=('linux44')
 
