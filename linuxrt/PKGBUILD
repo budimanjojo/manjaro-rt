@@ -31,7 +31,7 @@ source=(https://github.com/torvalds/linux/archive/v${_basekernel}.tar.gz
         'config.x86_64'
         'config.rt'
         # standard config files for mkinitcpio ramdisk
-        "${pkgbase}.preset"
+        "${pkgname}.preset"
         'http://sources.gentoo.org/cgi-bin/viewvc.cgi/linux-patches/genpatches-2.6/trunk/3.15/1700_enable-thinkpad-micled.patch'
         'http://sources.gentoo.org/cgi-bin/viewvc.cgi/linux-patches/genpatches-2.6/trunk/3.15/2700_ThinkPad-30-brightness-control-fix.patch'
         "0001-block-cgroups-kconfig-build-bits-for-BFQ-${_bfq}.patch::ftp://teambelgium.net/bfq/patches/4.4.0-${_bfq}/0001-block-cgroups-kconfig-build-bits-for-BFQ-${_bfq}-4.4.0.patch"
@@ -48,11 +48,11 @@ source=(https://github.com/torvalds/linux/archive/v${_basekernel}.tar.gz
         "https://www.kernel.org/pub/linux/kernel/projects/rt/${_basekernel}/older/patch-${_pkgverrt}-${_rtpatchver}.patch.sign"
 )
 sha256sums=('5b8fc6519a737a5c809171e08225f050bf794f1f369c4c387ed3c8a89b1e995b'  # v${_basekernel}.tar.gz
-            '1eb89dddd7e89caf2df17470b4b15da451ef1aa97f8e1a88578a8ee2da75729a'  # patch-${_pkgver}.xz"
+            'be42ec5fecf89c6f730f4d7af7db1dac56ac8f6451aed9246a500302ad8f3899'  # patch-${_pkgver}.xz"
             '389490eab392a70e9882251df4eef4a55a64090c3f81ac554f620bcb16c5fbed'  # config
             '4aba669ec026c2546a5c36432cb33a69994be141ead32b4e2aaa7c579970f3d4'  # config.x86_64
             'ea525250852ce56b6840ceb79c498d3ecf4ab5ea628fbcda069388353b91a6b4'  # config.rt
-            '8e05eb21098e4ced73461e3e6b18e6776ad1b4bd4999f526e93c6cf7a025e120'  # ${pkgbase}.preset
+            '8e05eb21098e4ced73461e3e6b18e6776ad1b4bd4999f526e93c6cf7a025e120'  # ${pkgname}.preset
             '461aa0da7de8bda9474797339532304894b55825be34f8c009244da8c00c5b41'  # 1700_enable-thinkpad-micled.patch
             'a3f85c3c35ee478fd174f8aaa6ca15e5fad8612b42ca4d90cc3ef79b49a99989'  # 2700_ThinkPad-30-brightness-control-fix.patch
             'd1cf14cc696b0f716454fe8eb9746383700889d5d22ad829611f0433cc77b4ce'  # 0001-block-cgroups-kconfig-build-bits-for-BFQ-${_bfq}-4.4.0.patch
@@ -136,12 +136,12 @@ prepare() {
   sed -i "s|CONFIG_HZ=300|CONFIG_HZ=1000|g" ./.config
 
   if [ "${_kernelname}" != "" ]; then
-    sed -i "s|CONFIG_LOCALVERSION=.*|CONFIG_LOCALVERSION=\"-${pkgrel}${_kernelname}\"|g" ./.config
+    sed -i "s|CONFIG_LOCALVERSION=.*|CONFIG_LOCALVERSION=\"-MANJARO\"|g" ./.config
     sed -i "s|CONFIG_LOCALVERSION_AUTO=.*|CONFIG_LOCALVERSION_AUTO=n|" ./.config
   fi
 
   # set extraversion to pkgrel
-#  sed -ri "s|^(EXTRAVERSION =).*|\1 -${pkgrel}|" Makefile
+  #sed -ri "s|^(EXTRAVERSION =).*|\1 -${pkgrel}|" Makefile
 
   # don't run depmod on 'make install'. We'll do this ourselves in packaging
   sed -i '2iexit 0' scripts/depmod.sh
@@ -164,17 +164,16 @@ prepare() {
 build() {
   cd "${srcdir}/${_srcname}"
 
+  # build!
   make ${MAKEFLAGS} LOCALVERSION= bzImage modules
 }
 
-_package_linuxrt() {
+package_linuxrt() {
   pkgdesc="The ${pkgbase/linux/Linux} kernel and modules"
-  #[ "${pkgbase}" = "linux" ] && groups=('base')
   depends=('coreutils' 'linux-firmware' 'kmod' 'mkinitcpio>=0.7')
   optdepends=('crda: to set the correct wireless channels of your country')
   provides=("linux=${pkgver}")
-  #backup=("etc/mkinitcpio.d/${pkgbase}.preset")
-  install="${pkgbase}.install"
+  install=${pkgname}.install
 
   cd "${srcdir}/${_srcname}"
 
@@ -189,17 +188,16 @@ _package_linuxrt() {
 
   # add kernel version
   if [ "${CARCH}" = "x86_64" ]; then
-     echo "${_pkgver}-${pkgrel}_${_rtpatchver}-MANJARO x64" > "${pkgdir}/boot/${pkgbase}-${CARCH}.kver"
+     echo "${_pkgver}-${_rtpatchver}-MANJARO x64" > "${pkgdir}/boot/${pkgbase}-${CARCH}.kver"
   else
-     echo "${_pkgver}-${pkgrel}_${_rtpatchver}-MANJARO x32" > "${pkgdir}/boot/${pkgbase}-${CARCH}.kver"
+     echo "${_pkgver}-${_rtpatchver}-MANJARO x32" > "${pkgdir}/boot/${pkgbase}-${CARCH}.kver"
   fi
 
   # set correct depmod command for install
   cp -f "${startdir}/${install}" "${startdir}/${install}.pkg"
   true && install=${install}.pkg
   sed \
-    -e  "s/RELEASE=.*/RELEASE=${pkgver}/g" \
-    #-e  "s/KERNEL_NAME=.*/KERNEL_NAME=${_kernelname}/" \
+    -e  "s/RELEASE=.*/RELEASE=${pkgver}-{rtpatchver}/g" \
     -e  "s/KERNEL_VERSION=.*/KERNEL_VERSION=${_kernver}/g" \
     -e  "s/KERNEL_BASE=.*/KERNEL_BASE=${_basekernel}${_kernelname}/g" \
     -e  "s/BASEVER=.*/BASEVER=${_basever}/g" \
@@ -207,13 +205,12 @@ _package_linuxrt() {
     -i "${startdir}/${install}"
 
   # install mkinitcpio preset file for kernel
-  install -D -m644 "${srcdir}/${pkgbase}.preset" "${pkgdir}/etc/mkinitcpio.d/${pkgbase}.preset"
+  install -D -m644 "${srcdir}/${pkgname}.preset" "${pkgdir}/etc/mkinitcpio.d/${pkgname}.preset"
   sed \
-    #-e "1s|'linux.*'|'${pkgbase}'|" \
     -e "s|ALL_kver=.*|ALL_kver=\"/boot/vmlinuz-${pkgbase}-${CARCH}\"|g" \
     -e "s|default_image=.*|default_image=\"/boot/initramfs-${pkgbase}-${CARCH}.img\"|g" \
     -e "s|fallback_image=.*|fallback_image=\"/boot/initramfs-${pkgbase}-${CARCH}-fallback.img\"|g" \
-    -i "${pkgdir}/etc/mkinitcpio.d/${pkgbase}.preset"
+    -i "${pkgdir}/etc/mkinitcpio.d/${pkgname}.preset"
 
   # remove build and source links
   rm -f "${pkgdir}"/lib/modules/${_kernver}/{source,build}
@@ -236,7 +233,7 @@ _package_linuxrt() {
   install -D -m644 vmlinux "${pkgdir}/usr/lib/modules/${_kernver}/build/vmlinux"
 }
 
-_package-linuxrt-headers() {
+package_linuxrt-headers() {
   pkgdesc="Header files and scripts for building modules for ${pkgbase/linux/Linux} kernel"
   provides=("linux-headers=${pkgver}")
 
