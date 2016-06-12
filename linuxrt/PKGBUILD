@@ -61,7 +61,7 @@ sha256sums=('5b8fc6519a737a5c809171e08225f050bf794f1f369c4c387ed3c8a89b1e995b'  
             '44e7e15c95af9676f715569e72688fd64304a70d2854b0f804c156d4961c72c0'  # change-default-console-loglevel.patch
             '3c158ebe93e3710d9a669015f0868f89c5170efdc36cb7cf5f46cc85df61ad3e'  # nvidia-304xx-mtrr-unknown-symbol.patch
             '5313df7cb5b4d005422bd4cd0dae956b2dadba8f3db904275aaf99ac53894375'  # 0001-sdhci-revert.patch
-            'eaffd380604e9460d7bbd995915c85fea6ba636847a1ed9c523ea171b9345d2d'  # i8042-asus-x455lab-dmi.patch
+            '8e8d9604c3e9593be41f70c8afba9b836a831cbe2448cb34405f26c6af31d9c8'  # i8042-asus-x455lab-dmi.patch
             '0fe3f95956b73d0682c44c0520eef11a9de067739d799c33eaf8bc1130331a1d'  # patch-${_pkgverrt}-${_rtpatchver}.patch.xz
             'SKIP'  # patch-${_pkgverrt}-${_rtpatchver}.patch.sign
             )
