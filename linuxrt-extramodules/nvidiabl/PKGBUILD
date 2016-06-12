@@ -4,18 +4,18 @@
 pkgname=linuxrt-nvidiabl
 _pkgname=nvidiabl
 pkgver=0.88
-pkgrel=13
+pkgrel=14
 epoch=
 pkgdesc="Driver to adjust display backlight on modern mobile NVidia graphics adapters."
 arch=('x86_64' 'i686')
 url="https://github.com/guillaumezin/nvidiabl"
 license=('GPL')
 depends=()
-makedepends=("linux44-headers")
+makedepends=("linuxrt-headers")
 optdepends=()
 conflicts=(nvidia-bl)
 provides=("$_pkgname=$pkgver")
-groups=('linux44-extramodules')
+groups=('linuxrt-extramodules')
 options=()
 install=nvidiabl.install
 changelog=

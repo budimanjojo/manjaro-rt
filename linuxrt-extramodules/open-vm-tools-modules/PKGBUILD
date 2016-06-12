@@ -7,11 +7,11 @@
 
 pkgname=linuxrt-open-vm-tools-modules
 _pkgname=open-vm-tools-modules
-groups=('linux44-extramodules')
+groups=('linuxrt-extramodules')
 epoch=2
 pkgver=2013.09.16
 _pkgsubver=1328054
-pkgrel=13
+pkgrel=14
 pkgdesc="kernel modules for the open source implementation of VMware Tools"
 arch=('i686' 'x86_64')
 url="http://open-vm-tools.sourceforge.net/"

@@ -4,7 +4,7 @@
 pkgbase=linuxrt-spl_zfs
 pkgname=('linuxrt-spl' 'linuxrt-zfs')
 pkgver=0.6.5.7
-pkgrel=3
+pkgrel=4
 url="http://zfsonlinux.org/"
 arch=('i686' 'x86_64')
 license=("CDDL")

@@ -11,7 +11,7 @@ pkgbase=ndiswrapper
 pkgname=('linuxrt-ndiswrapper' 'ndiswrapper-utils')
 groups=('linuxrt-extramodules')
 pkgver=1.59
-pkgrel=13
+pkgrel=14
 pkgdesc="Module for NDIS (Windows Network Drivers) drivers supplied by vendors."
 license=('GPL')
 arch=('i686' 'x86_64')
@@ -49,11 +49,11 @@ build() {
   make KVERS=$_kver
 }
 
-package_linux44-ndiswrapper() {
-  _extramodules=extramodules-4.4-MANJARO
+package_linuxrt-ndiswrapper() {
+  _extramodules=extramodules-4.4-rt-MANJARO
   _kver="$(cat /usr/lib/modules/${_extramodules}/version)"
   provides=("$_pkgname=$pkgver")
-  groups=('linux44-extramodules')
+  groups=('linuxrt-extramodules')
   install=ndiswrapper.install
   cd "$srcdir/$_pkgname-$pkgver"
 
@@ -73,7 +73,7 @@ package_linux44-ndiswrapper() {
 
 package_ndiswrapper-utils() {
   pkgdesc="Utils for NDIS (Windows Network Drivers) drivers supplied by vendors."
-  pkgrel=13
+  pkgrel=14
   depends=()
   groups=()
   cd $srcdir/tmp-ndis-utils
