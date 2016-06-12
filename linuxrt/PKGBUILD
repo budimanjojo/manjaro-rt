@@ -10,13 +10,13 @@
 #pkgbase=linux               # Build stock -ARCH kernel
 pkgbase=linux-rt             # Build kernel with a different name
 pkgname=('linuxrt' 'linuxrt-headers')
-_srcname=linux-4.4
-_basekernel=4.4
+_srcname=linux-4.6
+_basekernel=4.6
 _basever=rt
-_pkgver=${_basekernel}.13
-_pkgverrt=4.4.12
+_pkgver=${_basekernel}.2
+_pkgverrt=4.6.2
 _bfq=v7r11
-_rtpatchver=rt19
+_rtpatchver=rt5
 pkgver=${_pkgver}_${_rtpatchver}
 pkgrel=1
 arch=('i686' 'x86_64')
@@ -39,19 +39,20 @@ source=(https://github.com/torvalds/linux/archive/v${_basekernel}.tar.gz
         "0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-${_bfq}.patch::ftp://teambelgium.net/bfq/patches/4.4.0-${_bfq}/0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-${_bfq}-for.patch"
         # ARCH Patches
         'change-default-console-loglevel.patch'
+        '0001-linux-4.6-rtlwifi-fix-atomic.patch'
         # MANJARO Patches
         'nvidia-304xx-mtrr-unknown-symbol.patch'
-        '0001-sdhci-revert.patch'
+        'revert-intel-asoc.patch'
         'i8042-asus-x455lab-dmi.patch'
         # RT Patch
         "https://www.kernel.org/pub/linux/kernel/projects/rt/${_basekernel}/older/patch-${_pkgverrt}-${_rtpatchver}.patch.xz"
         "https://www.kernel.org/pub/linux/kernel/projects/rt/${_basekernel}/older/patch-${_pkgverrt}-${_rtpatchver}.patch.sign"
         'fix-race-in-PRT-wait-for-completion-simple-wait-code_Nvidia-RT-160319.patch'
 )
-sha256sums=('5b8fc6519a737a5c809171e08225f050bf794f1f369c4c387ed3c8a89b1e995b'  # v${_basekernel}.tar.gz
-            'be42ec5fecf89c6f730f4d7af7db1dac56ac8f6451aed9246a500302ad8f3899'  # patch-${_pkgver}.xz"
-            '389490eab392a70e9882251df4eef4a55a64090c3f81ac554f620bcb16c5fbed'  # config
-            '4aba669ec026c2546a5c36432cb33a69994be141ead32b4e2aaa7c579970f3d4'  # config.x86_64
+sha256sums=('1f2bcc9167668eca62fda7d22b6dd07052c87420bacc6d47d451ed6d441daf61'  # v${_basekernel}.tar.gz
+            '0dc509a19c68ab547a62158bf2017965b843854b63be46ae039c37724dccca21'  # patch-${_pkgver}.xz"
+            '53fd8b393c521c3d46a914dde95535013cd68a4e296c8279519630edfaee41e6'  # config
+            'f423ec4e9c80037017722dbff1c560bc506893149f9e32bf16e39df0b70066eb'  # config.x86_64
             'ea525250852ce56b6840ceb79c498d3ecf4ab5ea628fbcda069388353b91a6b4'  # config.rt
             '8e05eb21098e4ced73461e3e6b18e6776ad1b4bd4999f526e93c6cf7a025e120'  # ${pkgname}.preset
             '461aa0da7de8bda9474797339532304894b55825be34f8c009244da8c00c5b41'  # 1700_enable-thinkpad-micled.patch
@@ -60,10 +61,11 @@ sha256sums=('5b8fc6519a737a5c809171e08225f050bf794f1f369c4c387ed3c8a89b1e995b'  
             'b17c3fb18c5b8c20a45a38198f293679ca6aef08d16f12cd816a5cfafac4b2c4'  # 0002-block-introduce-the-BFQ-${_bfq}-I-O-sched-for-4.4.0.patch"
             '69a21bc286a628128cfc4723558829cb6ff6c2d7c4dfd4468457898674187b25'  # 0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-${_bfq}-for.patch
             '44e7e15c95af9676f715569e72688fd64304a70d2854b0f804c156d4961c72c0'  # change-default-console-loglevel.patch
+            'ae0d16e81a915fae130125ba9d0b6fd2427e06f50b8b9514abc4029efe61ee98'  # 0001-linux-4.6-rtlwifi-fix-atomic.patch
             '3c158ebe93e3710d9a669015f0868f89c5170efdc36cb7cf5f46cc85df61ad3e'  # nvidia-304xx-mtrr-unknown-symbol.patch
-            '5313df7cb5b4d005422bd4cd0dae956b2dadba8f3db904275aaf99ac53894375'  # 0001-sdhci-revert.patch
-            '8e8d9604c3e9593be41f70c8afba9b836a831cbe2448cb34405f26c6af31d9c8'  # i8042-asus-x455lab-dmi.patch
-            '0fe3f95956b73d0682c44c0520eef11a9de067739d799c33eaf8bc1130331a1d'  # patch-${_pkgverrt}-${_rtpatchver}.patch.xz
+            '030deb6b46cea9a3f037b03af4e53d27aa70537d42c535cf30db5c02e4a8ab43'  # revert-intel-asoc.patch
+            'af8f29631892bd3bb2654ff7b701f80f438832fd68a5e18896ef3ffe98363b9d'  # i8042-asus-x455lab-dmi.patch
+            '0f1318c689a5544c8fd41b3aa4393679602c4f0c8ed832d235014d3238343a8a'  # patch-${_pkgverrt}-${_rtpatchver}.patch.xz
             'SKIP'                                                              # patch-${_pkgverrt}-${_rtpatchver}.patch.sign
             '85f7612edfa129210343d6a4fe4ba2a4ac3542d98b7e28c8896738e7e6541c06'  # fix-race-in-PRT-wait-for-completion-simple-wait-code_Nvidia-RT-160319.patch
             )
@@ -82,22 +84,21 @@ prepare() {
   # add latest fixes from stable queue, if needed
   # http://git.kernel.org/?p=linux/kernel/git/stable/stable-queue.git
 
-  # revert http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=9faac7b95ea4f9e83b7a914084cc81ef1632fd91
-  # fixes #47778 sdhci broken on some boards
-  # https://bugzilla.kernel.org/show_bug.cgi?id=106541
-  msg "0001-sdhci-revert.patch"
-  patch -Rp1 -i "${srcdir}/0001-sdhci-revert.patch"
-
   # set DEFAULT_CONSOLE_LOGLEVEL to 4 (same value as the 'quiet' kernel param)
   # remove this when a Kconfig knob is made available by upstream
   # (relevant patch sent upstream: https://lkml.org/lkml/2011/7/26/227)
   msg "change-default-console-loglevel.patch"
   patch -p1 -i "${srcdir}/change-default-console-loglevel.patch"
 
+  # fix rtlwifi atomic
+  # https://bugs.archlinux.org/task/49401
+  msg "0001-linux-4.6-rtlwifi-fix-atomic.patch"
+  patch -p1 -i "${srcdir}/0001-linux-4.6-rtlwifi-fix-atomic.patch"
+
   # A patch to fix a problem that ought to be fixed in the NVIDIA source code.
   # Stops X from hanging on certain NVIDIA cards
-  msg "fix-race-in-PRT-wait-for-completion-simple-wait-code_Nvidia-RT-160319.patch"
-  patch -p1 -i "${srcdir}/fix-race-in-PRT-wait-for-completion-simple-wait-code_Nvidia-RT-160319.patch"
+  #msg "fix-race-in-PRT-wait-for-completion-simple-wait-code_Nvidia-RT-160319.patch"
+  #patch -p1 -i "${srcdir}/fix-race-in-PRT-wait-for-completion-simple-wait-code_Nvidia-RT-160319.patch"
 
   # fix X455LB touchpad issue
   # https://github.com/manjaro/packages-core/pull/39
@@ -126,6 +127,11 @@ prepare() {
   # https://bugs.archlinux.org/task/47092
   msg "nvidia-304xx-mtrr-unknown-symbol.patch"
   patch -Np1 -i "${srcdir}/nvidia-304xx-mtrr-unknown-symbol.patch"
+
+  # Deal with the Intel ASoC issue
+  # https://github.com/manjaro/packages-core/issues/35
+  msg "revert-intel-asoc.patch"
+  patch -Rp1 -i "${srcdir}/revert-intel-asoc.patch"
 
   msg "All patches have successfully been applied"
 
