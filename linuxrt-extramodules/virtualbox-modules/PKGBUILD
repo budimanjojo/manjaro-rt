@@ -20,7 +20,7 @@ makedepends=("virtualbox-host-dkms>=$pkgver"
              'dkms'
              'linuxrt' 'linuxrt-headers')
 
-_extraver=extramodules-4.4-rt-MANJARO
+_extraver=extramodules-4.6-rt-MANJARO
 _pkgver="${pkgver}_OSE"
 
 prepare() {

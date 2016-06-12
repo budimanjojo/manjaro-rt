@@ -19,7 +19,7 @@ groups=('linuxrt-extramodules')
 options=()
 install=nvidiabl.install
 changelog=
-_extramodules=extramodules-4.4-rt-MANJARO
+_extramodules=extramodules-4.6-rt-MANJARO
 _kernver="$(cat /usr/lib/modules/${_extramodules}/version)"
 
 source=(https://github.com/guillaumezin/nvidiabl/archive/master.zip 

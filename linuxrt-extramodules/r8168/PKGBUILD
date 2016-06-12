@@ -24,7 +24,7 @@ sha256sums=('1f7aad3a066c152837e03e558ba720742e792d281c96c5412cff32d68875415b')
 install=$_pkgname.install
 
 build() {
-	_extramodules=extramodules-4.4-rt-MANJARO
+	_extramodules=extramodules-4.6-rt-MANJARO
 	_kernver="$(cat /usr/lib/modules/$_extramodules/version || true)"
 	cd "$_pkgname-$pkgver"
 
@@ -37,7 +37,7 @@ build() {
 }
 
 package() {
-	_extramodules=extramodules-4.4-rt-MANJARO
+	_extramodules=extramodules-4.6-rt-MANJARO
 	cd "$srcdir/$_pkgname-$pkgver/src"
 	install -D -m644 $_pkgname.ko "$pkgdir/usr/lib/modules/$_extramodules/$_pkgname.ko"
 

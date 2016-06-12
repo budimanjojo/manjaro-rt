@@ -1,5 +1,5 @@
 post_install() {
-  EXTRAMODULES='extramodules-4.4-rt-MANJARO'
+  EXTRAMODULES='extramodules-4.6-rt-MANJARO'
   LINUX='linuxrt'
   depmod $(cat /usr/lib/modules/$EXTRAMODULES/version)
   echo ">>> Enabling vmxnet driver in /etc/modprobe.d/$LINUX-open-vm-tools-modules.conf"
@@ -11,12 +11,12 @@ post_install() {
 }
 
 post_upgrade() {
-  EXTRAMODULES='extramodules-4.4-rt-MANJARO'
+  EXTRAMODULES='extramodules-4.6-rt-MANJARO'
   depmod $(cat /usr/lib/modules/$EXTRAMODULES/version)
 }
 
 post_remove() {
-  EXTRAMODULES='extramodules-4.4-rt-MANJARO'
+  EXTRAMODULES='extramodules-4.6-rt-MANJARO'
   depmod $(cat /usr/lib/modules/$EXTRAMODULES/version)
   echo ">>>"
   echo ">>> Remember to un-blacklist pcnet32 driver"

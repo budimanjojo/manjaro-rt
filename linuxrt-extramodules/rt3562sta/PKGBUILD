@@ -18,7 +18,7 @@ makedepends=('linuxrt' 'linuxrt-headers')
 source=($pkgname-$pkgver.tar.gz::https://github.com/mtorromeo/rt3562sta-linux/archive/r${_patchrel}.tar.gz)
 
 build() {
-	_extramodules=extramodules-4.4-rt-MANJARO
+	_extramodules=extramodules-4.6-rt-MANJARO
 	KERNEL_RELEASE="$(cat /usr/lib/modules/$_extramodules/version)"
 
 	cd "$srcdir"/rt3562sta-linux-r$_patchrel
@@ -40,7 +40,7 @@ package_rt3562sta-common() {
 }
 
 package_linuxrt-rt3562sta() {
-	_extramodules=extramodules-4.4-rt-MANJARO
+	_extramodules=extramodules-4.6-rt-MANJARO
 	_kernver="$(cat /usr/lib/modules/$_extramodules/version)"
 	provides=("$pkgbase=$pkgver")
 	groups=('linuxrt-extramodules')

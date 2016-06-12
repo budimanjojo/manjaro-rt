@@ -36,7 +36,7 @@ prepare() {
 }
 
 build() {
-  _extraver=extramodules-4.4-rt-MANJARO
+  _extraver=extramodules-4.6-rt-MANJARO
   _kernver="$(cat /usr/lib/modules/${_extraver}/version)"
 
   # build host modules
@@ -45,7 +45,7 @@ build() {
 }
 
 package_linuxrt-broadcom-wl(){
-  _extraver=extramodules-4.4-rt-MANJARO
+  _extraver=extramodules-4.6-rt-MANJARO
   _kernver="$(cat /usr/lib/modules/${_extraver}/version)"
   depends=('linuxrt')
 

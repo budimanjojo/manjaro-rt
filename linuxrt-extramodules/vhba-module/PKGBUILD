@@ -9,7 +9,7 @@
 pkgname=linuxrt-vhba-module
 _pkgname=vhba-module
 pkgver=20140629
-_extramodules=extramodules-4.4-rt-MANJARO
+_extramodules=extramodules-4.6-rt-MANJARO
 pkgrel=14
 pkgdesc="Kernel module that emulates SCSI devices"
 arch=('i686' 'x86_64')

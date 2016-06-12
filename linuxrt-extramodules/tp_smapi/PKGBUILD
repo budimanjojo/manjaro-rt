@@ -7,7 +7,7 @@
 # Contributor: Stefan Rupp <archlinux ð stefanrupp đ de>
 # Contributor: Ignas Anikevicius <anikevicius ð gmail đ com>
 
-_extramodules=extramodules-4.4-rt-MANJARO
+_extramodules=extramodules-4.6-rt-MANJARO
 _kernver="$(cat /usr/lib/modules/${_extramodules}/version)"
 _extramodules=$(readlink -f "/usr/lib/modules/${_kernver}/extramodules")
 _pkgname=tp_smapi
