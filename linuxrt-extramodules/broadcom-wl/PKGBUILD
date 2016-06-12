@@ -47,7 +47,7 @@ build() {
 package_linuxrt-broadcom-wl(){
   _extraver=extramodules-4.4-rt-MANJARO
   _kernver="$(cat /usr/lib/modules/${_extraver}/version)"
-  depends=('linux44')
+  depends=('linuxrt')
 
   install -dm755 "$pkgdir/usr/lib/modules/$_extraver"
   cd "dkms/broadcom-wl/$pkgver/$_kernver/$CARCH/module"
