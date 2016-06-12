@@ -46,6 +46,7 @@ source=(https://github.com/torvalds/linux/archive/v${_basekernel}.tar.gz
         # RT Patch
         "https://www.kernel.org/pub/linux/kernel/projects/rt/${_basekernel}/older/patch-${_pkgverrt}-${_rtpatchver}.patch.xz"
         "https://www.kernel.org/pub/linux/kernel/projects/rt/${_basekernel}/older/patch-${_pkgverrt}-${_rtpatchver}.patch.sign"
+        'fix-race-in-PRT-wait-for-completion-simple-wait-code_Nvidia-RT-160319.patch'
 )
 sha256sums=('5b8fc6519a737a5c809171e08225f050bf794f1f369c4c387ed3c8a89b1e995b'  # v${_basekernel}.tar.gz
             'be42ec5fecf89c6f730f4d7af7db1dac56ac8f6451aed9246a500302ad8f3899'  # patch-${_pkgver}.xz"
@@ -63,7 +64,8 @@ sha256sums=('5b8fc6519a737a5c809171e08225f050bf794f1f369c4c387ed3c8a89b1e995b'  
             '5313df7cb5b4d005422bd4cd0dae956b2dadba8f3db904275aaf99ac53894375'  # 0001-sdhci-revert.patch
             '8e8d9604c3e9593be41f70c8afba9b836a831cbe2448cb34405f26c6af31d9c8'  # i8042-asus-x455lab-dmi.patch
             '0fe3f95956b73d0682c44c0520eef11a9de067739d799c33eaf8bc1130331a1d'  # patch-${_pkgverrt}-${_rtpatchver}.patch.xz
-            'SKIP'  # patch-${_pkgverrt}-${_rtpatchver}.patch.sign
+            'SKIP'                                                              # patch-${_pkgverrt}-${_rtpatchver}.patch.sign
+            '85f7612edfa129210343d6a4fe4ba2a4ac3542d98b7e28c8896738e7e6541c06'  # fix-race-in-PRT-wait-for-completion-simple-wait-code_Nvidia-RT-160319.patch
             )
 
 validpgpkeys=('64254695FFF0AA4466CC19E67B96E8162A8CF5D1' # Sebastian Andrzej Siewior
@@ -91,6 +93,11 @@ prepare() {
   # (relevant patch sent upstream: https://lkml.org/lkml/2011/7/26/227)
   msg "change-default-console-loglevel.patch"
   patch -p1 -i "${srcdir}/change-default-console-loglevel.patch"
+
+  # A patch to fix a problem that ought to be fixed in the NVIDIA source code.
+  # Stops X from hanging on certain NVIDIA cards
+  msg "fix-race-in-PRT-wait-for-completion-simple-wait-code_Nvidia-RT-160319.patch"
+  patch -p1 -i "${srcdir}/fix-race-in-PRT-wait-for-completion-simple-wait-code_Nvidia-RT-160319.patch"
 
   # fix X455LB touchpad issue
   # https://github.com/manjaro/packages-core/pull/39
@@ -188,9 +195,9 @@ package_linuxrt() {
 
   # add kernel version
   if [ "${CARCH}" = "x86_64" ]; then
-     echo "${_pkgver}-${_rtpatchver}-MANJARO x64" > "${pkgdir}/boot/${pkgbase}-${CARCH}.kver"
+     echo "${_pkgver}-${_rtpatchver}-MANJARO x64" > "${pkgdir}/boot/${pkgname}-${CARCH}.kver"
   else
-     echo "${_pkgver}-${_rtpatchver}-MANJARO x32" > "${pkgdir}/boot/${pkgbase}-${CARCH}.kver"
+     echo "${_pkgver}-${_rtpatchver}-MANJARO x32" > "${pkgdir}/boot/${pkgname}-${CARCH}.kver"
   fi
 
   # set correct depmod command for install
