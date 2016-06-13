@@ -84,6 +84,10 @@ prepare() {
   # add latest fixes from stable queue, if needed
   # http://git.kernel.org/?p=linux/kernel/git/stable/stable-queue.git
 
+  # Add RT patch
+  msg "applying patch-${_pkgverrt}-${_rtpatchver}.patch"
+  patch -p1 -i "${srcdir}/patch-${_pkgverrt}-${_rtpatchver}.patch"
+
   # set DEFAULT_CONSOLE_LOGLEVEL to 4 (same value as the 'quiet' kernel param)
   # remove this when a Kconfig knob is made available by upstream
   # (relevant patch sent upstream: https://lkml.org/lkml/2011/7/26/227)
@@ -97,17 +101,13 @@ prepare() {
 
   # A patch to fix a problem that ought to be fixed in the NVIDIA source code.
   # Stops X from hanging on certain NVIDIA cards
-  #msg "fix-race-in-PRT-wait-for-completion-simple-wait-code_Nvidia-RT-160319.patch"
-  #patch -p1 -i "${srcdir}/fix-race-in-PRT-wait-for-completion-simple-wait-code_Nvidia-RT-160319.patch"
+  msg "fix-race-in-PRT-wait-for-completion-simple-wait-code_Nvidia-RT-160319.patch"
+  patch -p1 -i "${srcdir}/fix-race-in-PRT-wait-for-completion-simple-wait-code_Nvidia-RT-160319.patch"
 
   # fix X455LB touchpad issue
   # https://github.com/manjaro/packages-core/pull/39
   msg "i8042-asus-x455lab-dmi.patch"
   patch -p1 -i "${srcdir}/i8042-asus-x455lab-dmi.patch"
-
-  # Add RT patch
-  msg "applying patch-${_pkgverrt}-${_rtpatchver}.patch"
-  patch -p1 -i "${srcdir}/patch-${_pkgverrt}-${_rtpatchver}.patch"
 
   # add Gentoo patches
   msg "1700_enable-thinkpad-micled.patch"
