@@ -154,7 +154,7 @@ prepare() {
   fi
 
   # set extraversion to pkgrel
-  #sed -ri "s|^(EXTRAVERSION =).*|\1 -${pkgrel}|" Makefile
+  sed -ri "s|^(EXTRAVERSION =).*|\1 -${pkgrel}|" Makefile
 
   # don't run depmod on 'make install'. We'll do this ourselves in packaging
   sed -i '2iexit 0' scripts/depmod.sh
@@ -186,7 +186,7 @@ package_linuxrt() {
   depends=('coreutils' 'linux-firmware' 'kmod' 'mkinitcpio>=0.7')
   optdepends=('crda: to set the correct wireless channels of your country')
   provides=("linux=${pkgver}")
-  install=${pkgname}.install
+  install=linux${_basever}.install
 
   cd "${srcdir}/${_srcname}"
 
@@ -201,16 +201,16 @@ package_linuxrt() {
 
   # add kernel version
   if [ "${CARCH}" = "x86_64" ]; then
-     echo "${_pkgver}-${_rtpatchver}-MANJARO x64" > "${pkgdir}/boot/${pkgname}-${CARCH}.kver"
+     echo "${_pkgver}-${pkgrel}-${_rtpatchver}-MANJARO x64" > "${pkgdir}/boot/linux${_basever}-${CARCH}.kver"
   else
-     echo "${_pkgver}-${_rtpatchver}-MANJARO x32" > "${pkgdir}/boot/${pkgname}-${CARCH}.kver"
+     echo "${_pkgver}-${pkgrel}-${_rtpatchver}-MANJARO x32" > "${pkgdir}/boot/linux${_basever}-${CARCH}.kver"
   fi
 
   # set correct depmod command for install
   cp -f "${startdir}/${install}" "${startdir}/${install}.pkg"
   true && install=${install}.pkg
   sed \
-    -e  "s/RELEASE=.*/RELEASE=${pkgver}-{rtpatchver}/g" \
+    -e  "s/RELEASE=.*/RELEASE=${_pkgver}-${pkgrel}-${_rtpatchver}/g" \
     -e  "s/KERNEL_VERSION=.*/KERNEL_VERSION=${_kernver}/g" \
     -e  "s/KERNEL_BASE=.*/KERNEL_BASE=${_basekernel}${_kernelname}/g" \
     -e  "s/BASEVER=.*/BASEVER=${_basever}/g" \
@@ -220,9 +220,9 @@ package_linuxrt() {
   # install mkinitcpio preset file for kernel
   install -D -m644 "${srcdir}/${pkgname}.preset" "${pkgdir}/etc/mkinitcpio.d/${pkgname}.preset"
   sed \
-    -e "s|ALL_kver=.*|ALL_kver=\"/boot/vmlinuz-${pkgbase}-${CARCH}\"|g" \
-    -e "s|default_image=.*|default_image=\"/boot/initramfs-${pkgbase}-${CARCH}.img\"|g" \
-    -e "s|fallback_image=.*|fallback_image=\"/boot/initramfs-${pkgbase}-${CARCH}-fallback.img\"|g" \
+    -e "s|ALL_kver=.*|ALL_kver=\"/boot/vmlinuz-${_basekernel}${_kernelname}-${CARCH}\"|g" \
+    -e "s|default_image=.*|default_image=\"/boot/initramfs-${_basekernel}${_kernelname}-${CARCH}.img\"|g" \
+    -e "s|fallback_image=.*|fallback_image=\"/boot/initramfs-${_basekernel}${_kernelname}-${CARCH}-fallback.img\"|g" \
     -i "${pkgdir}/etc/mkinitcpio.d/${pkgname}.preset"
 
   # remove build and source links
@@ -344,6 +344,12 @@ package_linuxrt-headers() {
     mkdir -p "${pkgdir}"/usr/lib/modules/${_kernver}/build/`echo ${i} | sed 's|/Kconfig.*||'`
     cp ${i} "${pkgdir}/usr/lib/modules/${_kernver}/build/${i}"
   done
+
+  # add objtool for external module building and enabled VALIDATION_STACK option
+  if [ -f tools/objtool/objtool ]; then
+    mkdir -p "${pkgdir}/usr/lib/modules/${_kernver}/build/tools/objtool"
+    cp -a tools/objtool/objtool ${pkgdir}/usr/lib/modules/${_kernver}/build/tools/objtool/
+  fi
 
   chown -R root.root "${pkgdir}/usr/lib/modules/${_kernver}/build"
   find "${pkgdir}/usr/lib/modules/${_kernver}/build" -type d -exec chmod 755 {} \;
