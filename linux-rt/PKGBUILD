@@ -9,7 +9,7 @@
 
 #pkgbase=linux               # Build stock -ARCH kernel
 pkgbase=linux-rt             # Build kernel with a different name
-pkgname=('linux-rt-manjaro' 'linux-rt-headers-manjaro')
+pkgname=('linux-rt-manjaro' 'linux-rt-manjaro-headers')
 _srcname=linux-4.6
 _basekernel=4.6
 _basever=rt
@@ -181,7 +181,7 @@ build() {
   make ${MAKEFLAGS} LOCALVERSION= bzImage modules
 }
 
-package_linuxrt() {
+package_linux-rt-manjaro() {
   pkgdesc="The ${pkgbase/linux/Linux} kernel and modules"
   depends=('coreutils' 'linux-firmware' 'kmod' 'mkinitcpio>=0.7')
   optdepends=('crda: to set the correct wireless channels of your country')
@@ -246,7 +246,7 @@ package_linuxrt() {
   install -D -m644 vmlinux "${pkgdir}/usr/lib/modules/${_kernver}/build/vmlinux"
 }
 
-package_linuxrt-headers() {
+package_linux-rt-manjaro-headers() {
   pkgdesc="Header files and scripts for building modules for ${pkgbase/linux/Linux} kernel"
   provides=("linux-headers=${pkgver}")
 
