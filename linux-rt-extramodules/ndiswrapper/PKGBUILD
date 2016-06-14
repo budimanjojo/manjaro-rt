@@ -8,16 +8,16 @@
 
 _pkgname=ndiswrapper
 pkgbase=ndiswrapper
-pkgname=('linuxrt-ndiswrapper' 'ndiswrapper-utils')
-groups=('linuxrt-extramodules')
+pkgname=('linux-rt-manjaro-ndiswrapper' 'ndiswrapper-utils')
+groups=('linux-rt-manjaro-extramodules')
 pkgver=1.59
 pkgrel=14
 pkgdesc="Module for NDIS (Windows Network Drivers) drivers supplied by vendors."
 license=('GPL')
 arch=('i686' 'x86_64')
 url="http://ndiswrapper.sourceforge.net"
-depends=('linuxrt' 'wireless_tools' 'perl' "$_pkgname-utils")
-makedepends=('linuxrt-headers')
+depends=('linux-rt-manjaro' 'wireless_tools' 'perl' "$_pkgname-utils")
+makedepends=('linux-rt-manjaro-headers')
 source=("http://downloads.sourceforge.net/sourceforge/$_pkgname/$_pkgname-$pkgver.tar.gz"
         "kernel-3.14.patch"
         "kernel-4.0.patch"
@@ -49,11 +49,11 @@ build() {
   make KVERS=$_kver
 }
 
-package_linuxrt-ndiswrapper() {
+package_linux-rt-manjaro-ndiswrapper() {
   _extramodules=extramodules-4.4-rt-MANJARO
   _kver="$(cat /usr/lib/modules/${_extramodules}/version)"
   provides=("$_pkgname=$pkgver")
-  groups=('linuxrt-extramodules')
+  groups=('linux-rt-manjaro-extramodules')
   install=ndiswrapper.install
   cd "$srcdir/$_pkgname-$pkgver"
 

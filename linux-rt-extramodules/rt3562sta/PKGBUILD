@@ -6,7 +6,7 @@
 # Co-Maintainer: Clittle <philm@manjarolinux.org>
 
 pkgbase=rt3562sta
-pkgname=('linuxrt-rt3562sta' 'rt3562sta-common')
+pkgname=('linux-rt-manjaro-rt3562sta' 'rt3562sta-common')
 pkgver=2.4.1.1_r3
 _patchrel=${pkgver/*_r/}
 pkgrel=9
@@ -14,7 +14,7 @@ _subpkgrel=9
 arch=(i686 x86_64)
 url="http://www.mediatek.com/en/Products/support.php?sn=501"
 license=('GPL')
-makedepends=('linuxrt' 'linuxrt-headers')
+makedepends=('linux-rt-manjaro' 'linux-rt-manjaro-headers')
 source=($pkgname-$pkgver.tar.gz::https://github.com/mtorromeo/rt3562sta-linux/archive/r${_patchrel}.tar.gz)
 
 build() {
@@ -39,14 +39,14 @@ package_rt3562sta-common() {
 	install -m 0644 iwpriv_usage.txt README* RT3562STA* sta_ate_iwpriv_usage.txt "$pkgdir/usr/share/doc/$pkgbase"
 }
 
-package_linuxrt-rt3562sta() {
+package_linux-rt-manjaro-rt3562sta() {
 	_extramodules=extramodules-4.6-rt-MANJARO
 	_kernver="$(cat /usr/lib/modules/$_extramodules/version)"
 	provides=("$pkgbase=$pkgver")
-	groups=('linuxrt-extramodules')
+	groups=('linux-rt-manjaro-extramodules')
 	pkgdesc="Ralink RT3562 PCI WLAN adaptors kernel module"
-	depends=('linuxrt' 'rt3562sta-common')
-	groups=('linuxrt-extramodules')
+	depends=('linux-rt-manjaro' 'rt3562sta-common')
+	groups=('linux-rt-manjaro-extramodules')
         install=$pkgbase.install
 	cd "$srcdir/rt3562sta-linux-r$_patchrel"
 

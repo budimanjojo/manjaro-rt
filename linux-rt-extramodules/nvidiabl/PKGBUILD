@@ -1,7 +1,7 @@
 # Maintainer: Philip Müller <philm@manjarolinux.org>
 # Co-Maintainer: Guinux <nuxgui@gmail.com>
 
-pkgname=linuxrt-nvidiabl
+pkgname=linux-rt-manjaro-nvidiabl
 _pkgname=nvidiabl
 pkgver=0.88
 pkgrel=14
@@ -11,11 +11,11 @@ arch=('x86_64' 'i686')
 url="https://github.com/guillaumezin/nvidiabl"
 license=('GPL')
 depends=()
-makedepends=("linuxrt-headers")
+makedepends=("linux-rt-manjaro-headers")
 optdepends=()
 conflicts=(nvidia-bl)
 provides=("$_pkgname=$pkgver")
-groups=('linuxrt-extramodules')
+groups=('linux-rt-manjaro-extramodules')
 options=()
 install=nvidiabl.install
 changelog=
@@ -43,7 +43,7 @@ package() {
   install -d $MODPATH
   install -m 644 -c nvidiabl.ko $MODPATH
   sed -i -e "s/EXTRAMODULES='.*'/EXTRAMODULES='${_extramodules}'/" "${startdir}/nvidiabl.install"
-  sed -i -e "s/VERSION='.*'/VERSION='linuxrt'/" "${startdir}/nvidiabl.install"
+  sed -i -e "s/VERSION='.*'/VERSION='linux-rt-manjaro'/" "${startdir}/nvidiabl.install"
 }
 
 # vim:set ts=2 sw=2 et:

@@ -6,7 +6,7 @@
 # Maintainer: Guinux <nuxgui@gmail.com>
 # Co-Maintainer: Clittle <philm@manjarolinux.org>
 
-pkgname=linuxrt-vhba-module
+pkgname=linux-rt-manjaro-vhba-module
 _pkgname=vhba-module
 pkgver=20140629
 _extramodules=extramodules-4.6-rt-MANJARO
@@ -15,10 +15,10 @@ pkgdesc="Kernel module that emulates SCSI devices"
 arch=('i686' 'x86_64')
 url="http://cdemu.sourceforge.net/"
 license=('GPL')
-depends=('linuxrt')
-makedepends=('linuxrt-headers')
+depends=('linux-rt-manjaro')
+makedepends=('linux-rt-manjaro-headers')
 provides=("$_pkgname=$pkgver")
-groups=('linuxrt-extramodules')
+groups=('linux-rt-manjaro-extramodules')
 install=$_pkgname.install
 source=("http://downloads.sourceforge.net/cdemu/$_pkgname-$pkgver.tar.bz2"
         '60-vhba.rules')

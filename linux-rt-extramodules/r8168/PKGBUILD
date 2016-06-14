@@ -7,7 +7,7 @@
 # Maintainer: Guinux <guillaume@manjaro.org>
 # Maintainer: Rob McCathie <rob@manjaro.org>
 
-pkgname=linuxrt-r8168
+pkgname=linux-rt-manjaro-r8168
 _pkgname=r8168
 pkgver=8.040.00
 pkgrel=14
@@ -15,10 +15,10 @@ pkgdesc="A kernel module for Realtek 8168 network cards"
 url="http://www.realtek.com.tw"
 license=("GPL")
 arch=('i686' 'x86_64')
-depends=('glibc' 'linuxrt')
-makedepends=('linuxrt-headers')
+depends=('glibc' 'linux-rt-manjaro')
+makedepends=('linux-rt-manjaro-headers')
 provides=("$_pkgname=$pkgver")
-groups=('linuxrt-extramodules')
+groups=('linux-rt-manjaro-extramodules')
 source=("https://github.com/mtorromeo/r8168/archive/$pkgver/$pkgname-$pkgver.tar.gz")
 sha256sums=('1f7aad3a066c152837e03e558ba720742e792d281c96c5412cff32d68875415b')
 install=$_pkgname.install
