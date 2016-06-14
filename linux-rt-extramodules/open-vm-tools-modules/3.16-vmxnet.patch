@@ -1,0 +1,13 @@
+diff -uprN a/open-vm-tools/modules/linux/vmxnet/vmxnet.c b/open-vm-tools/modules/linux/vmxnet/vmxnet.c
+--- a/open-vm-tools/modules/linux/vmxnet/vmxnet.c	2014-07-02 00:21:14.000000000 +0200
++++ b/open-vm-tools/modules/linux/vmxnet/vmxnet.c	2014-08-12 01:47:36.381858700 +0200
+@@ -235,6 +235,9 @@ static int disable_lro = 0;
+ #define VMXNET_LOG(msg...)
+ #endif // VMXNET_DEBUG
+ 
++#define SET_ETHTOOL_OPS(netdev,ops) \
++        ( (netdev)->ethtool_ops = (ops) )
++
+ /* Data structure used when determining what hardware the driver supports. */
+ 
+ static const struct pci_device_id vmxnet_chips[] =

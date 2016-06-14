@@ -1,0 +1,62 @@
+# Maintainer: Jesus Alvarez <jeezusjr at gmail dot com>
+# Contributor: Kyle Fuller <inbox at kylefuller dot co dot uk>
+
+pkgbase=linuxrt-spl_zfs
+pkgname=('linuxrt-spl' 'linuxrt-zfs')
+pkgver=0.6.5.7
+pkgrel=4
+url="http://zfsonlinux.org/"
+arch=('i686' 'x86_64')
+license=("CDDL")
+depends=('linuxrt')
+makedepends=("spl-dkms>=$pkgver" "zfs-dkms>=$pkgver"
+             'dkms'
+             'linuxrt' 'linuxrt-headers')
+groups=('linuxrt-extramodules')
+install=install
+
+prepare() {
+  # dkms need modification to be run as user
+  cp -r /var/lib/dkms .
+  echo "dkms_tree='$srcdir/dkms'" > dkms.conf
+}
+
+build() {
+  _extraver=extramodules-4.6-rt-MANJARO
+  _kernver="$(cat /usr/lib/modules/${_extraver}/version)"
+
+  # build host modules
+  msg2 'Build modules'
+  dkms --dkmsframework dkms.conf build "spl/$pkgver" -k "$_kernver" --verbose
+  dkms --dkmsframework dkms.conf build "zfs/$pkgver" -k "$_kernver" --verbose
+}
+
+package_linuxrt-zfs(){
+  _extraver=extramodules-4.6-rt-MANJARO
+  _kernver="$(cat /usr/lib/modules/${_extraver}/version)"
+  _pkgname=zfs
+  pkgdesc='Kernel modules for the Zettabyte File System.'
+  provides=("$_pkgname=$pkgver")
+  depends=('linuxrt-spl' "zfs-utils=${pkgver}")
+
+  install -dm755 "$pkgdir/usr/lib/modules/$_extraver"
+  cd "dkms/zfs/$pkgver/$_kernver/$CARCH/module"
+  install -m644 * "$pkgdir/usr/lib/modules/$_extraver"
+  find "$pkgdir" -name '*.ko' -exec gzip -9 {} +
+  sed -i -e "s/EXTRAMODULES='.*'/EXTRAMODULES='$_extraver'/" "$startdir/install"
+}
+
+package_linuxrt-spl(){
+  _extraver=extramodules-4.6-rt-MANJARO
+  _kernver="$(cat /usr/lib/modules/${_extraver}/version)"
+  _pkgname=spl
+  pkgdesc='Solaris Porting Layer kernel modules.'
+  provides=("$_pkgname=$pkgver")
+  depends=('kmod' 'linuxrt' "spl-utils=${pkgver}")
+
+  install -dm755 "$pkgdir/usr/lib/modules/$_extraver"
+  cd "dkms/spl/$pkgver/$_kernver/$CARCH/module"
+  install -m644 * "$pkgdir/usr/lib/modules/$_extraver"
+  find "$pkgdir" -name '*.ko' -exec gzip -9 {} +
+  sed -i -e "s/EXTRAMODULES='.*'/EXTRAMODULES='$_extraver'/" "$startdir/install"
+}
