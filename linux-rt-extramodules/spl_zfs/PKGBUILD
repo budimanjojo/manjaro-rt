@@ -4,7 +4,7 @@
 pkgbase=linux-rt-manjaro-spl_zfs
 pkgname=('linux-rt-manjaro-spl' 'linux-rt-manjaro-zfs')
 pkgver=0.6.5.7
-pkgrel=4
+pkgrel=1
 url="http://zfsonlinux.org/"
 arch=('i686' 'x86_64')
 license=("CDDL")

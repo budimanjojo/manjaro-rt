@@ -10,7 +10,7 @@
 pkgbase=linux-rt-manjaro-virtualbox-modules
 pkgname=('linux-rt-manjaro-virtualbox-host-modules' 'linux-rt-manjaro-virtualbox-guest-modules')
 pkgver=5.0.20
-pkgrel=6
+pkgrel=1
 arch=('i686' 'x86_64')
 url='http://virtualbox.org'
 license=('GPL')

@@ -9,7 +9,7 @@ pkgbase=rt3562sta
 pkgname=('linux-rt-manjaro-rt3562sta' 'rt3562sta-common')
 pkgver=2.4.1.1_r3
 _patchrel=${pkgver/*_r/}
-pkgrel=9
+pkgrel=1
 _subpkgrel=9
 arch=(i686 x86_64)
 url="http://www.mediatek.com/en/Products/support.php?sn=501"
