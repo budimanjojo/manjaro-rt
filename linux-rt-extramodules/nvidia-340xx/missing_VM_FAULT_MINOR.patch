@@ -1,0 +1,11 @@
+--- NVIDIA-Linux-x86_64-340.96-no-compat32/kernel/uvm/nvidia_uvm_lite.c	2015-11-09 06:44:53.000000000 +0100
++++ NVIDIA-Linux-x86_64-340.96-no-compat32b/kernel/uvm/nvidia_uvm_lite.c	2016-03-27 09:16:44.101624404 +0200
+@@ -785,7 +785,7 @@
+         // a reference so that the fault handling logic is correct:
+         //
+         get_page(pTracking->uvmPage);
+-        retValue = VM_FAULT_MINOR;
++        retValue = 0;
+     }
+ 
+     pRecord->isMapped = NV_TRUE;

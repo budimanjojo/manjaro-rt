@@ -22,19 +22,32 @@ depends=('linux-rt-manjaro')
 makedepends=('linux-rt-manjaro-headers')
 groups=('linux-rt-manjaro-extramodules')
 install="${_pkgname}.install"
-source=("https://github.com/downloads/evgeni/${_pkgname}/${_pkgname}-${pkgver}.tar.gz")
-md5sums=('63c683415c764568f6bf17c7eabe4752')
+source=("https://github.com/downloads/evgeni/${_pkgname}/${_pkgname}-${pkgver}.tar.gz"
+        "change_type_of_force_io_to_bool.patch::https://github.com/evgeni/tp_smapi/commit/8f40fcf3d9a4bfb9c3dae1caa2107ea3a367a609.patch")
+md5sums=('63c683415c764568f6bf17c7eabe4752'
+         'fd46e3ac1b0e2ab7d0614531a693ccae')
+
+prepare() {
+  cd "${srcdir}/${_pkgname}-${pkgver}"
+
+  patch -Np1 -i "../change_type_of_force_io_to_bool.patch"
+}
 
 build() {
+  _kernver="$(cat /usr/lib/modules/${_extraver}/version)"
+  _extramodules=$(readlink -f "/usr/lib/modules/${_kernver}/extramodules")
+
   cd "${srcdir}/${_pkgname}-${pkgver}"
 
   sed -ri -e "s/^(KVER\s*:=).*$/\1 ${_kernver}/" \
-	  -e "s#^(KBASE\s*:=).*\$#\1 ${_extramodules%/*}/${_kernver}#" Makefile
-
+          -e "s#^(KBASE\s*:=).*\$#\1 ${_extramodules%/*}/${_kernver}#" Makefile
   make HDAPS=1
 }
 
 package() {
+  _kernver="$(cat /usr/lib/modules/${_extraver}/version)"
+  _extramodules=$(readlink -f "/usr/lib/modules/${_kernver}/extramodules")
+
   make -C "${_extramodules%/*}/${_kernver}/build" \
     INSTALL_MOD_PATH="${pkgdir}/${_extramodules%%/lib/*}" \
     M="${srcdir}/${_pkgname}-${pkgver}" modules_install

@@ -22,7 +22,8 @@ conflicts=('nvidia-96xx' 'nvidia-173xx' "$_linuxprefix-nvidia" "$_linuxprefix-nv
 license=('custom')
 install=nvidia.install
 options=(!strip)
-source=('nvidia-3.18.patch')
+source=('nvidia-3.18.patch'
+        'missing_VM_FAULT_MINOR.patch)
 source_i686=("http://us.download.nvidia.com/XFree86/Linux-x86/${pkgver}/NVIDIA-Linux-x86-${pkgver}.run")
 source_x86_64=("http://us.download.nvidia.com/XFree86/Linux-x86_64/${pkgver}/NVIDIA-Linux-x86_64-${pkgver}-no-compat32.run")
 md5sums=('79671a27131da619a33eb02ed0c2c031')
@@ -38,6 +39,8 @@ prepare() {
     # patches here
     # https://devtalk.nvidia.com/default/topic/783364/343-22-driver-incompatible-with-linux-3-18-/
     patch -Np0 -i ${srcdir}/nvidia-3.18.patch
+    # https://devtalk.nvidia.com/default/topic/926824/linux/364-12-won-t-compile-against-latest-git-tree-patches-for-4-6-0-rc1-included-/
+    patch -Np1 -i ${srcdir}/missing_VM_FAULT_MINOR.patch
 }
 
 build() {
