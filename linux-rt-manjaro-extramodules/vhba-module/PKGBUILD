@@ -6,19 +6,20 @@
 # Maintainer: Guinux <nuxgui@gmail.com>
 # Co-Maintainer: Clittle <philm@manjarolinux.org>
 
-pkgname=linux-rt-manjaro-vhba-module
+_linuxprefix=linux-rt-manjaro
+_extramodules=extramodules-4.6-rt-MANJARO
+pkgname=$_linuxprefix-vhba-module
 _pkgname=vhba-module
 pkgver=20140629
-_extramodules=extramodules-4.6-rt-MANJARO
 pkgrel=1
 pkgdesc="Kernel module that emulates SCSI devices"
 arch=('i686' 'x86_64')
 url="http://cdemu.sourceforge.net/"
 license=('GPL')
-depends=('linux-rt-manjaro')
-makedepends=('linux-rt-manjaro-headers')
+depends=("$_linuxprefix")
+makedepends=("$_linuxprefix-headers")
 provides=("$_pkgname=$pkgver")
-groups=('linux-rt-manjaro-extramodules')
+groups=("$_linuxprefix-extramodules")
 install=$_pkgname.install
 source=("http://downloads.sourceforge.net/cdemu/$_pkgname-$pkgver.tar.bz2"
         '60-vhba.rules')
@@ -30,9 +31,9 @@ prepare() {
 }
 
 build() {
-  cd "$srcdir/$_pkgname-$pkgver"
-
   _kernver="$(cat /usr/lib/modules/$_extramodules/version)"
+  
+  cd "$srcdir/$_pkgname-$pkgver"
 
   make -j1 KDIR=/usr/lib/modules/${_kernver}/build
 }
@@ -45,10 +46,10 @@ package() {
   sed -i "s/EXTRAMODULES=.*/EXTRAMODULES=$_extramodules/" \
     "$startdir/vhba-module.install"
 
-	find "$pkgdir" -name '*.ko' -exec gzip -9 {} \;
+  find "$pkgdir" -name '*.ko' -exec gzip -9 {} \;
 
   install -Dm644 "$srcdir/60-vhba.rules" \
-	  "$pkgdir/usr/lib/udev/rules.d/60-linux44-vhba.rules"
+          "$pkgdir/usr/lib/udev/rules.d/60-$_linuxprefix-vhba.rules"
 }
 
 # vim:set ts=2 sw=2 et:

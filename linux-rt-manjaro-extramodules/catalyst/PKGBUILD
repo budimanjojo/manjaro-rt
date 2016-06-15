@@ -35,9 +35,10 @@ source=(http://www2.ati.com/drivers/linux/amd-catalyst-${_tarball}-x86.x86_64.zi
         manjaro_fglrx_4.2.patch
         manjaro_fglrx_4.3.patch
         gentoo_fglrx_4.3_mtrr.patch
+        manjaro_fglrx_4.5.patch
 	LICENSE.TXT)
 
-sha256sums=('bf3e6e7d5c51db3d075410a3f116f865b82823debc1d66698d187249feec6a91'
+sha256sums=('11c483af22812437b3e7ca453f8e059dba341de6b763610c1709481dbe946928'
             '8b2adf804c2691d075bb75fbb626be59f3769a2f4f1418554fc3de91a65451ab'
             'd7ab220204976b5802dbfa7cbd05ec0c5a9ff3524a2020b1b8deff4f601a05fa'
             '37344e6949b391a54491bcba68c2239393e442a00114ee36fe25d775d9656520'
@@ -49,6 +50,7 @@ sha256sums=('bf3e6e7d5c51db3d075410a3f116f865b82823debc1d66698d187249feec6a91'
             '2bc280abeddef92832997433f3182063a51cd2e580426727e97f887ae8af485f'
             'a7cebf78578c68e6b765c5b821d5c0d4bc716ad8d97456478b60beecd35a7602'
             '2881026d607f242efc4569bd39d647eae4f2e402da06de5b90476a57c349777c'
+            'b60a04538f55e77b58351face25f2e12b55a2b1bc5be89e17b9b35e65f78cda8'
             '4f7530540f6e1ea032746e94bd164160abdf93c15509bfb8bdbecd23bcea5c47')
 
 prepare() {
@@ -63,6 +65,11 @@ prepare() {
 	#mv arch common xpic xpic_64a LICENSE.TXT fglrx-$_pkgver/archive_files
 	mkdir -p fglrx-$_pkgver
 	mv archive_files fglrx-$_pkgver
+
+	# page_cache_release() -> put_page(); 09cbfeaf1a5a67bfb3201e0c83c810cecb2efa5a
+	# get_user_pages() to not pass tsk/mm; d4edcf0d56958db0aca0196314ca38a5e730ea92
+	sed -i 's|page_cache_release|put_page|g' ${srcdir}/fglrx-$_pkgver/archive_files/common/lib/modules/fglrx/build_mod/firegl_public.c
+	sed -i 's|get_user_pages(current, current->mm, |get_user_pages(|g'  ${srcdir}/fglrx-$_pkgver/archive_files/common/lib/modules/fglrx/build_mod/firegl_public.c
 }
 
 build() {
@@ -98,6 +105,7 @@ build() {
         patch -Np1 -i ${srcdir}/manjaro_fglrx_4.2.patch
         patch -Np1 -i ${srcdir}/manjaro_fglrx_4.3.patch
         patch -Np6 -i ${srcdir}/gentoo_fglrx_4.3_mtrr.patch
+        patch -Np1 -i ${srcdir}/manjaro_fglrx_4.5.patch
 
 	## fix linux44 build
 	sed -i -e s'|XSTATE_FP|XFEATURE_MASK_FP|g' firegl_public.c
@@ -113,6 +121,8 @@ build() {
 
 
 package() {
+	_kernver="$(cat /usr/lib/modules/${_extramodules}/version)"
+
 	cd "${srcdir}/fglrx-$_pkgver/archive_files/common/lib/modules/fglrx/build_mod"
 	install -m755 -d "${pkgdir}/usr/lib/modules/${_extramodules}/"
 	install -m644 fglrx.ko "${pkgdir}/usr/lib/modules/${_extramodules}/"

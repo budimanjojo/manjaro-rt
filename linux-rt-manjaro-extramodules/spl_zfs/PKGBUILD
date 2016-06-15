@@ -1,19 +1,21 @@
 # Maintainer: Jesus Alvarez <jeezusjr at gmail dot com>
 # Contributor: Kyle Fuller <inbox at kylefuller dot co dot uk>
 
-pkgbase=linux-rt-manjaro-spl_zfs
-pkgname=('linux-rt-manjaro-spl' 'linux-rt-manjaro-zfs')
+_linuxprefix=linux-rt-manjaro
+_extramodules=extramodules-4.6-rt-MANJARO
+pkgbase=$_linuxprefix-spl_zfs
+pkgname=("$_linuxprefix-spl" "$_linuxprefix-zfs")
 pkgver=0.6.5.7
 pkgrel=1
 url="http://zfsonlinux.org/"
 arch=('i686' 'x86_64')
 license=("CDDL")
-depends=('linux-rt-manjaro')
+depends=("$_linuxprefix")
 makedepends=("spl-dkms>=$pkgver" "zfs-dkms>=$pkgver"
              'dkms'
-             'linux-rt-manjaro' 'linux-rt-manjaro-headers')
-groups=('linux-rt-manjaro-extramodules')
-install=install
+             "$_linuxprefix-headers")
+groups=("$_linuxprefix-extramodules")
+install=spl_zfs.install
 
 prepare() {
   # dkms need modification to be run as user
@@ -22,8 +24,7 @@ prepare() {
 }
 
 build() {
-  _extraver=extramodules-4.6-rt-MANJARO
-  _kernver="$(cat /usr/lib/modules/${_extraver}/version)"
+  _kernver="$(cat /usr/lib/modules/${_extramodules}/version)"
 
   # build host modules
   msg2 'Build modules'
@@ -32,31 +33,31 @@ build() {
 }
 
 package_linux-rt-manjaro-zfs(){
-  _extraver=extramodules-4.6-rt-MANJARO
-  _kernver="$(cat /usr/lib/modules/${_extraver}/version)"
   _pkgname=zfs
   pkgdesc='Kernel modules for the Zettabyte File System.'
   provides=("$_pkgname=$pkgver")
-  depends=('linux-rt-manjaro-spl' "zfs-utils=${pkgver}")
+  depends+=("$_linuxprefix-spl" "zfs-utils=${pkgver}")
 
-  install -dm755 "$pkgdir/usr/lib/modules/$_extraver"
+  _kernver="$(cat /usr/lib/modules/${_extramodules}/version)"
+
+  install -dm755 "$pkgdir/usr/lib/modules/$_extramodules"
   cd "dkms/zfs/$pkgver/$_kernver/$CARCH/module"
-  install -m644 * "$pkgdir/usr/lib/modules/$_extraver"
+  install -m644 * "$pkgdir/usr/lib/modules/$_extramodules"
   find "$pkgdir" -name '*.ko' -exec gzip -9 {} +
-  sed -i -e "s/EXTRAMODULES='.*'/EXTRAMODULES='$_extraver'/" "$startdir/install"
+  sed -i -e "s/EXTRAMODULES='.*'/EXTRAMODULES='$_extramodules'/" "$startdir/spl_zfs.install"
 }
 
 package_linux-rt-manjaro-spl(){
-  _extraver=extramodules-4.6-rt-MANJARO
-  _kernver="$(cat /usr/lib/modules/${_extraver}/version)"
   _pkgname=spl
   pkgdesc='Solaris Porting Layer kernel modules.'
   provides=("$_pkgname=$pkgver")
-  depends=('kmod' 'linux-rt-manjaro' "spl-utils=${pkgver}")
+  depends+=('kmod' "spl-utils=${pkgver}")
 
-  install -dm755 "$pkgdir/usr/lib/modules/$_extraver"
+  _kernver="$(cat /usr/lib/modules/${_extramodules}/version)"
+
+  install -dm755 "$pkgdir/usr/lib/modules/$_extramodules"
   cd "dkms/spl/$pkgver/$_kernver/$CARCH/module"
-  install -m644 * "$pkgdir/usr/lib/modules/$_extraver"
+  install -m644 * "$pkgdir/usr/lib/modules/$_extramodules"
   find "$pkgdir" -name '*.ko' -exec gzip -9 {} +
-  sed -i -e "s/EXTRAMODULES='.*'/EXTRAMODULES='$_extraver'/" "$startdir/install"
+  sed -i -e "s/EXTRAMODULES='.*'/EXTRAMODULES='$_extramodules'/" "$startdir/spl_zfs.install"
 }

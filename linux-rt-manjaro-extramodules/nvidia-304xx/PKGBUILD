@@ -23,8 +23,6 @@ license=('custom')
 install=nvidia.install
 options=(!strip)
 source=('nvidia-3.18.patch')
-sha256sums=('c9986c306f452614fcf23990c55ffe12bdc451bcbd65a5200269f90a722a3d35')
-source=('nvidia-3.18.patch')
 source_i686=("http://us.download.nvidia.com/XFree86/Linux-x86/${pkgver}/NVIDIA-Linux-x86-${pkgver}.run")
 source_x86_64=("http://us.download.nvidia.com/XFree86/Linux-x86_64/${pkgver}/NVIDIA-Linux-x86_64-${pkgver}-no-compat32.run")
 md5sums=('79671a27131da619a33eb02ed0c2c031')
@@ -41,6 +39,11 @@ prepare() {
   # patches here
   # https://devtalk.nvidia.com/default/topic/783364/343-22-driver-incompatible-with-linux-3-18-/
   patch -Np0 -i ${srcdir}/nvidia-3.18.patch
+
+  # page_cache_release() -> put_page(); 09cbfeaf1a5a67bfb3201e0c83c810cecb2efa5a
+  # get_user_pages() to not pass tsk/mm; d4edcf0d56958db0aca0196314ca38a5e730ea92
+  sed -i 's|page_cache_release|put_page|g' kernel/nv-mlock.c
+  sed -i 's|get_user_pages(current, mm, |get_user_pages(|g' kernel/nv-mlock.c
 }
 
 build() {

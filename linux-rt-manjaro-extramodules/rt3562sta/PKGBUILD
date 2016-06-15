@@ -5,26 +5,28 @@
 # Maintainer: Guinux <nuxgui@gmail.com>
 # Co-Maintainer: Clittle <philm@manjarolinux.org>
 
+_linuxprefix=linux-rt-manjaro
+_extramodules=extramodules-4.6-rt-MANJARO
 pkgbase=rt3562sta
-pkgname=('linux-rt-manjaro-rt3562sta' 'rt3562sta-common')
+pkgname=("$_linuxprefix-rt3562sta" 'rt3562sta-common')
 pkgver=2.4.1.1_r3
 _patchrel=${pkgver/*_r/}
 pkgrel=1
-_subpkgrel=9
+_subpkgrel=2
 arch=(i686 x86_64)
 url="http://www.mediatek.com/en/Products/support.php?sn=501"
 license=('GPL')
-makedepends=('linux-rt-manjaro' 'linux-rt-manjaro-headers')
+makedepends=("$_linuxprefix" "$_linuxprefix-headers")
 source=($pkgname-$pkgver.tar.gz::https://github.com/mtorromeo/rt3562sta-linux/archive/r${_patchrel}.tar.gz)
+sha256sums=('3428c37e91f04dfb0d5e4aae9bbcbf72a3816e8804d0735110a53d1140c37eaa')
 
 build() {
-	_extramodules=extramodules-4.6-rt-MANJARO
-	KERNEL_RELEASE="$(cat /usr/lib/modules/$_extramodules/version)"
+	_kernver="$(cat /usr/lib/modules/$_extramodules/version)"
 
 	cd "$srcdir"/rt3562sta-linux-r$_patchrel
 
 	EXTRA_CFLAGS="-DVERSION=$pkgver" \
-	LINUX_SRC="/usr/lib/modules/$KERNEL_RELEASE/build" \
+	LINUX_SRC="/usr/lib/modules/$_kernver/build" \
 		make
 }
 
@@ -32,6 +34,7 @@ package_rt3562sta-common() {
 	pkgdesc="Ralink RT3562 PCI WLAN adaptors common files"
         arch=(any)
         pkgrel="$_subpkgrel"
+
 	cd "$srcdir/rt3562sta-linux-r$_patchrel"
 
 	install -Dm 0640 RT3562STA.dat "$pkgdir/etc/Wireless/RT3562STA/RT3562STA.dat"
@@ -40,14 +43,12 @@ package_rt3562sta-common() {
 }
 
 package_linux-rt-manjaro-rt3562sta() {
-	_extramodules=extramodules-4.6-rt-MANJARO
-	_kernver="$(cat /usr/lib/modules/$_extramodules/version)"
-	provides=("$pkgbase=$pkgver")
-	groups=('linux-rt-manjaro-extramodules')
 	pkgdesc="Ralink RT3562 PCI WLAN adaptors kernel module"
-	depends=('linux-rt-manjaro' 'rt3562sta-common')
-	groups=('linux-rt-manjaro-extramodules')
+	provides=("$pkgbase=$pkgver")
+	groups=("$_linuxprefix-extramodules")
+	depends=("$_linuxprefix" 'rt3562sta-common')
         install=$pkgbase.install
+
 	cd "$srcdir/rt3562sta-linux-r$_patchrel"
 
 	install -Dm 0644 os/linux/$pkgbase.ko "$pkgdir/usr/lib/modules/$_extramodules/$pkgbase.ko"
@@ -57,5 +58,3 @@ package_linux-rt-manjaro-rt3562sta() {
 
 	find "$pkgdir" -name '*.ko' -exec gzip -9 {} \;
 }
-
-sha256sums=('3428c37e91f04dfb0d5e4aae9bbcbf72a3816e8804d0735110a53d1140c37eaa')

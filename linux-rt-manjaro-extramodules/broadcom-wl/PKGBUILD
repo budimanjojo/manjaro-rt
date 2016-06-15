@@ -4,7 +4,9 @@
 # Maintainer: Guinux <guillaume@manjaro.org>
 # Maintainer: Roland Singer <roland@manjaro.org>
 
-pkgname=linux-rt-manjaro-broadcom-wl
+_linuxprefix=linux-rt-manjaro
+_extramodules=extramodules-4.6-rt-MANJARO
+pkgname=$_linuxprefix-broadcom-wl
 _pkgname=broadcom-wl
 pkgver=6.30.223.248
 pkgrel=1
@@ -12,13 +14,13 @@ pkgdesc='Broadcom 802.11 Linux STA wireless driver BCM43142.'
 url='https://bbs.archlinux.org/viewtopic.php?id=145884'
 arch=('i686' 'x86_64')
 license=('custom')
-depends=('linux-rt-manjaro')
+depends=("$_linuxprefix")
 makedepends=("broadcom-wl-dkms>=$pkgver"
              'dkms'
-             'linux-rt-manjaro' 'linux-rt-manjaro-headers')
-groups=('linux-rt-manjaro-extramodules')
+             "$_linuxprefix" "$_linuxprefix-headers")
+groups=("$_linuxprefix-extramodules")
 provides=("$_pkgname=$pkgver")
-install=install
+install=$_pkgname.install
 source=(broadcom-wl-dkms.conf)
 sha256sums=('b97bc588420d1542f73279e71975ccb5d81d75e534e7b5717e01d6e6adf6a283')
 
@@ -36,23 +38,20 @@ prepare() {
 }
 
 build() {
-  _extraver=extramodules-4.6-rt-MANJARO
-  _kernver="$(cat /usr/lib/modules/${_extraver}/version)"
+  _kernver="$(cat /usr/lib/modules/${_extramodules}/version)"
 
   # build host modules
   msg2 'Build module'
   dkms --dkmsframework dkms.conf build "broadcom-wl/$pkgver" -k "$_kernver"
 }
 
-package_linux-rt-manjaro-broadcom-wl(){
-  _extraver=extramodules-4.6-rt-MANJARO
-  _kernver="$(cat /usr/lib/modules/${_extraver}/version)"
-  depends=('linux-rt-manjaro')
+package(){
+  _kernver="$(cat /usr/lib/modules/${_extramodules}/version)"
 
-  install -dm755 "$pkgdir/usr/lib/modules/$_extraver"
+  install -dm755 "$pkgdir/usr/lib/modules/$_extramodules"
   cd "dkms/broadcom-wl/$pkgver/$_kernver/$CARCH/module"
-  install -m644 * "$pkgdir/usr/lib/modules/$_extraver"
+  install -m644 * "$pkgdir/usr/lib/modules/$_extramodules"
   find "$pkgdir" -name '*.ko' -exec gzip -9 {} +
-  sed -i -e "s/EXTRAMODULES='.*'/EXTRAMODULES='$_extraver'/" "$startdir/install"
-  install -D -m 644 "${srcdir}"/broadcom-wl-dkms.conf "${pkgdir}"/etc/modprobe.d/linux44-broadcom-wl.conf
+  sed -i -e "s/EXTRAMODULES='.*'/EXTRAMODULES='$_extramodules'/" "$startdir/$_pkgname.install"
+  install -D -m 644 "${srcdir}"/broadcom-wl-dkms.conf "${pkgdir}/etc/modprobe.d/${_linuxprefix}-broadcom-wl.conf"
 }

@@ -1,5 +1,5 @@
 EXTRAMODULES='extramodules-4.6-rt-MANJARO'
-VERSION='linuxrt'
+VERSION='linux-rt-manjaro'
 
 post_install() {
     depmod $(cat /usr/lib/modules/$EXTRAMODULES/version)

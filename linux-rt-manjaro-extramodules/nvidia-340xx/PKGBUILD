@@ -4,7 +4,6 @@
 # Maintainer: Philip Müller <philm@manjaro.org>
 # Maintainer: Roland Singer <roland@manjaro.org>
 
-
 _linuxprefix=linux-rt-manjaro
 _extramodules=extramodules-4.6-rt-MANJARO
 pkgname=$_linuxprefix-nvidia-340xx
@@ -23,10 +22,11 @@ license=('custom')
 install=nvidia.install
 options=(!strip)
 source=('nvidia-3.18.patch'
-        'missing_VM_FAULT_MINOR.patch)
+        'missing_VM_FAULT_MINOR.patch')
 source_i686=("http://us.download.nvidia.com/XFree86/Linux-x86/${pkgver}/NVIDIA-Linux-x86-${pkgver}.run")
 source_x86_64=("http://us.download.nvidia.com/XFree86/Linux-x86_64/${pkgver}/NVIDIA-Linux-x86_64-${pkgver}-no-compat32.run")
-md5sums=('79671a27131da619a33eb02ed0c2c031')
+md5sums=('79671a27131da619a33eb02ed0c2c031'
+         'c34c55b152bc869f2a7bc147199c3ee3')
 md5sums_i686=('cb64b165b638671bcdc75bcf297b8d90')
 md5sums_x86_64=('7bdbcee13bade63227933d9217571882')
 
@@ -41,10 +41,16 @@ prepare() {
     patch -Np0 -i ${srcdir}/nvidia-3.18.patch
     # https://devtalk.nvidia.com/default/topic/926824/linux/364-12-won-t-compile-against-latest-git-tree-patches-for-4-6-0-rc1-included-/
     patch -Np1 -i ${srcdir}/missing_VM_FAULT_MINOR.patch
+
+    # page_cache_release() -> put_page(); 09cbfeaf1a5a67bfb3201e0c83c810cecb2efa5a
+    # get_user_pages() to not pass tsk/mm; d4edcf0d56958db0aca0196314ca38a5e730ea92
+    sed -i 's|page_cache_release|put_page|g' kernel/os-mlock.c
+    sed -i 's|get_user_pages(current, mm, |get_user_pages(|g' kernel/os-mlock.c
 }
 
 build() {
     _kernver="$(cat /usr/lib/modules/${_extramodules}/version)"
+
     cd "${_pkg}"/kernel
     make SYSSRC=/usr/lib/modules/"${_kernver}/build" module
 

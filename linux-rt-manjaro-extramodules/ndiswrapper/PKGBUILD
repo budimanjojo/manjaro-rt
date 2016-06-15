@@ -6,18 +6,20 @@
 # Maintainer: Guinux <nuxgui@gmail.com>
 # Co-Maintainer: Clittle <philm@manjarolinux.org>
 
-_pkgname=ndiswrapper
+_linuxprefix=linux-rt-manjaro
+_extramodules=extramodules-4.6-rt-MANJARO
 pkgbase=ndiswrapper
-pkgname=('linux-rt-manjaro-ndiswrapper' 'ndiswrapper-utils')
-groups=('linux-rt-manjaro-extramodules')
+pkgname=("$_linuxprefix-ndiswrapper" 'ndiswrapper-utils')
+_pkgname=ndiswrapper
+groups=("$_linuxprefix-extramodules")
 pkgver=1.59
 pkgrel=1
 pkgdesc="Module for NDIS (Windows Network Drivers) drivers supplied by vendors."
 license=('GPL')
 arch=('i686' 'x86_64')
 url="http://ndiswrapper.sourceforge.net"
-depends=('linux-rt-manjaro' 'wireless_tools' 'perl' "$_pkgname-utils")
-makedepends=('linux-rt-manjaro-headers')
+depends=("$_linuxprefix" 'wireless_tools' 'perl' "$_pkgname-utils")
+makedepends=("$_linuxprefix-headers")
 source=("http://downloads.sourceforge.net/sourceforge/$_pkgname/$_pkgname-$pkgver.tar.gz"
         "kernel-3.14.patch"
         "kernel-4.0.patch"
@@ -36,29 +38,28 @@ prepare() {
 }
 
 build() {
-  _extramodules=extramodules-4.6-rt-MANJARO
-  _kver="$(cat /usr/lib/modules/${_extramodules}/version)"
+  _kernver="$(cat /usr/lib/modules/${_extramodules}/version)"
+
   cd "$srcdir/$_pkgname-$pkgver"
 
   # modinfo path fix
   sed -i "/modinfo/s/s/usr\//" driver/Makefile
 
   # make sure we point to the right build directory
-  sed -i "/^KBUILD/ s,.*,KBUILD = $(readlink -f /usr/lib/modules/$_kver/build)," driver/Makefile
+  sed -i "/^KBUILD/ s,.*,KBUILD = $(readlink -f /usr/lib/modules/$_kernver/build)," driver/Makefile
 
-  make KVERS=$_kver
+  make KVERS=$_kernver
 }
 
 package_linux-rt-manjaro-ndiswrapper() {
-  _extramodules=extramodules-4.4-rt-MANJARO
-  _kver="$(cat /usr/lib/modules/${_extramodules}/version)"
+  _kernver="$(cat /usr/lib/modules/${_extramodules}/version)"
+
   provides=("$_pkgname=$pkgver")
-  groups=('linux-rt-manjaro-extramodules')
   install=ndiswrapper.install
   cd "$srcdir/$_pkgname-$pkgver"
 
   make INST_DIR="usr/lib/modules/$_extramodules" \
-    KVERS=$_kver DESTDIR="$pkgdir/" sbindir=/usr/bin usrsbindir=/usr/bin install
+    KVERS=$_kernver DESTDIR="$pkgdir/" sbindir=/usr/bin usrsbindir=/usr/bin install
 
   # set the kernel we've built for inside the install script
   sed -i -e "s/EXTRAMODULES=.*/EXTRAMODULES=${_extramodules}/g" "${startdir}/${_pkgname}.install"
@@ -73,7 +74,7 @@ package_linux-rt-manjaro-ndiswrapper() {
 
 package_ndiswrapper-utils() {
   pkgdesc="Utils for NDIS (Windows Network Drivers) drivers supplied by vendors."
-  pkgrel=14
+  pkgrel=2
   depends=()
   groups=()
   cd $srcdir/tmp-ndis-utils
