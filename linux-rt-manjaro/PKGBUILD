@@ -49,26 +49,25 @@ source=(https://github.com/torvalds/linux/archive/v${_basekernel}.tar.gz
         "https://www.kernel.org/pub/linux/kernel/projects/rt/${_basekernel}/older/patch-${_pkgverrt}-${_rtpatchver}.patch.sign"
         'fix-race-in-PRT-wait-for-completion-simple-wait-code_Nvidia-RT-160319.patch'
 )
-sha256sums=('1f2bcc9167668eca62fda7d22b6dd07052c87420bacc6d47d451ed6d441daf61'  # v${_basekernel}.tar.gz
-            '0dc509a19c68ab547a62158bf2017965b843854b63be46ae039c37724dccca21'  # patch-${_pkgver}.xz"
-            '53fd8b393c521c3d46a914dde95535013cd68a4e296c8279519630edfaee41e6'  # config
-            'f423ec4e9c80037017722dbff1c560bc506893149f9e32bf16e39df0b70066eb'  # config.x86_64
-            'ea525250852ce56b6840ceb79c498d3ecf4ab5ea628fbcda069388353b91a6b4'  # config.rt
-            '8e05eb21098e4ced73461e3e6b18e6776ad1b4bd4999f526e93c6cf7a025e120'  # linux${_basever}.preset
-            '461aa0da7de8bda9474797339532304894b55825be34f8c009244da8c00c5b41'  # 1700_enable-thinkpad-micled.patch
-            'a3f85c3c35ee478fd174f8aaa6ca15e5fad8612b42ca4d90cc3ef79b49a99989'  # 2700_ThinkPad-30-brightness-control-fix.patch
-            'd1cf14cc696b0f716454fe8eb9746383700889d5d22ad829611f0433cc77b4ce'  # 0001-block-cgroups-kconfig-build-bits-for-BFQ-${_bfq}-4.4.0.patch
-            'b17c3fb18c5b8c20a45a38198f293679ca6aef08d16f12cd816a5cfafac4b2c4'  # 0002-block-introduce-the-BFQ-${_bfq}-I-O-sched-for-4.4.0.patch"
-            '69a21bc286a628128cfc4723558829cb6ff6c2d7c4dfd4468457898674187b25'  # 0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-${_bfq}-for.patch
-            '44e7e15c95af9676f715569e72688fd64304a70d2854b0f804c156d4961c72c0'  # change-default-console-loglevel.patch
-            'ae0d16e81a915fae130125ba9d0b6fd2427e06f50b8b9514abc4029efe61ee98'  # 0001-linux-4.6-rtlwifi-fix-atomic.patch
-            '3c158ebe93e3710d9a669015f0868f89c5170efdc36cb7cf5f46cc85df61ad3e'  # nvidia-304xx-mtrr-unknown-symbol.patch
-            '030deb6b46cea9a3f037b03af4e53d27aa70537d42c535cf30db5c02e4a8ab43'  # revert-intel-asoc.patch
-            'af8f29631892bd3bb2654ff7b701f80f438832fd68a5e18896ef3ffe98363b9d'  # i8042-asus-x455lab-dmi.patch
-            '0f1318c689a5544c8fd41b3aa4393679602c4f0c8ed832d235014d3238343a8a'  # patch-${_pkgverrt}-${_rtpatchver}.patch.xz
-            'SKIP'                                                              # patch-${_pkgverrt}-${_rtpatchver}.patch.sign
-            '85f7612edfa129210343d6a4fe4ba2a4ac3542d98b7e28c8896738e7e6541c06'  # fix-race-in-PRT-wait-for-completion-simple-wait-code_Nvidia-RT-160319.patch
-            )
+sha256sums=('1f2bcc9167668eca62fda7d22b6dd07052c87420bacc6d47d451ed6d441daf61'
+            '0dc509a19c68ab547a62158bf2017965b843854b63be46ae039c37724dccca21'
+            '53fd8b393c521c3d46a914dde95535013cd68a4e296c8279519630edfaee41e6'
+            'f423ec4e9c80037017722dbff1c560bc506893149f9e32bf16e39df0b70066eb'
+            'b8481fd15473ab7ff88bfe2377d8aa43da317e46c9c26ed226c213da3abfd241'
+            '8e05eb21098e4ced73461e3e6b18e6776ad1b4bd4999f526e93c6cf7a025e120'
+            '461aa0da7de8bda9474797339532304894b55825be34f8c009244da8c00c5b41'
+            'a3f85c3c35ee478fd174f8aaa6ca15e5fad8612b42ca4d90cc3ef79b49a99989'
+            'd1cf14cc696b0f716454fe8eb9746383700889d5d22ad829611f0433cc77b4ce'
+            'b17c3fb18c5b8c20a45a38198f293679ca6aef08d16f12cd816a5cfafac4b2c4'
+            '69a21bc286a628128cfc4723558829cb6ff6c2d7c4dfd4468457898674187b25'
+            '44e7e15c95af9676f715569e72688fd64304a70d2854b0f804c156d4961c72c0'
+            'ae0d16e81a915fae130125ba9d0b6fd2427e06f50b8b9514abc4029efe61ee98'
+            '3c158ebe93e3710d9a669015f0868f89c5170efdc36cb7cf5f46cc85df61ad3e'
+            '030deb6b46cea9a3f037b03af4e53d27aa70537d42c535cf30db5c02e4a8ab43'
+            'af8f29631892bd3bb2654ff7b701f80f438832fd68a5e18896ef3ffe98363b9d'
+            '0f1318c689a5544c8fd41b3aa4393679602c4f0c8ed832d235014d3238343a8a'
+            'SKIP'
+            '85f7612edfa129210343d6a4fe4ba2a4ac3542d98b7e28c8896738e7e6541c06')
 
 validpgpkeys=('64254695FFF0AA4466CC19E67B96E8162A8CF5D1' # Sebastian Andrzej Siewior
              )
@@ -152,10 +151,10 @@ prepare() {
   sed -i "s|# CONFIG_LATENCYTOP is not set|CONFIG_LATENCYTOP=y|g" ./.config
 
   # Match linux-rt config
-  awk '!/CONFIG_UNINLINE_SPIN_UNLOCK=y/' ./config > temp && mv temp ./.config
-  awk '!/CONFIG_MUTEX_SPIN_ON_OWNER=y/' ./config > temp && mv temp ./.config
-  awk '!/CONFIG_RWSEM_SPIN_ON_OWNER=y/' ./config > temp && mv temp ./.config
-  awk '!CONFIG_LOCK_SPIN_ON_OWNER=y/' ./config > temp && mv temp ./.config
+  awk '!/CONFIG_UNINLINE_SPIN_UNLOCK=y/' ./.config > temp && mv temp ./.config
+  awk '!/CONFIG_MUTEX_SPIN_ON_OWNER=y/' ./.config > temp && mv temp ./.config
+  awk '!/CONFIG_RWSEM_SPIN_ON_OWNER=y/' ./.config > temp && mv temp ./.config
+  awk '!/CONFIG_LOCK_SPIN_ON_OWNER=y/' ./.config > temp && mv temp ./.config
 
   if [ "${_kernelname}" != "" ]; then
     sed -i "s|CONFIG_LOCALVERSION=.*|CONFIG_LOCALVERSION=\"-MANJARO\"|g" ./.config
