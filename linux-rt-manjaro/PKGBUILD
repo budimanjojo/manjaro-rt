@@ -18,7 +18,7 @@ _pkgverrt=4.6.2
 _bfq=v7r11
 _rtpatchver=rt5
 pkgver=${_pkgver}_${_rtpatchver}
-pkgrel=1
+pkgrel=2
 arch=('i686' 'x86_64')
 url="http://www.kernel.org/"
 license=('GPL2')
@@ -53,7 +53,7 @@ sha256sums=('1f2bcc9167668eca62fda7d22b6dd07052c87420bacc6d47d451ed6d441daf61'
             '0dc509a19c68ab547a62158bf2017965b843854b63be46ae039c37724dccca21'
             '53fd8b393c521c3d46a914dde95535013cd68a4e296c8279519630edfaee41e6'
             'f423ec4e9c80037017722dbff1c560bc506893149f9e32bf16e39df0b70066eb'
-            'b8481fd15473ab7ff88bfe2377d8aa43da317e46c9c26ed226c213da3abfd241'
+            '8bcd31f3a15825d197e00da85a452ee75448c428991796e4a66bd4dce70a11b4'
             '8e05eb21098e4ced73461e3e6b18e6776ad1b4bd4999f526e93c6cf7a025e120'
             '461aa0da7de8bda9474797339532304894b55825be34f8c009244da8c00c5b41'
             'a3f85c3c35ee478fd174f8aaa6ca15e5fad8612b42ca4d90cc3ef79b49a99989'
