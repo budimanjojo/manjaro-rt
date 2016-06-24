@@ -3,6 +3,7 @@
 
 _linuxprefix=linux-rt-manjaro
 _extramodules=extramodules-4.6-rt-MANJARO
+_kernver="$(cat /usr/lib/modules/${_extramodules}/version)"
 pkgbase=$_linuxprefix-spl_zfs
 pkgname=("$_linuxprefix-spl" "$_linuxprefix-zfs")
 pkgver=0.6.5.7
@@ -10,26 +11,45 @@ pkgrel=2
 url="http://zfsonlinux.org/"
 arch=('i686' 'x86_64')
 license=("CDDL")
-depends=("$_linuxprefix")
-makedepends=("spl-dkms>=$pkgver" "zfs-dkms>=$pkgver"
-             'dkms'
-             "$_linuxprefix-headers")
+depends=("$_linuxprefix" "kmod")
+makedepends=("$_linuxprefix-headers")
 groups=("$_linuxprefix-extramodules")
-install=spl_zfs.install
-
-prepare() {
-  # dkms need modification to be run as user
-  cp -r /var/lib/dkms .
-  echo "dkms_tree='$srcdir/dkms'" > dkms.conf
-}
+install=install
+source=("http://archive.zfsonlinux.org/downloads/zfsonlinux/spl/spl-${pkgver}.tar.gz"
+        "http://archive.zfsonlinux.org/downloads/zfsonlinux/zfs/zfs-${pkgver}.tar.gz")
+sha256sums=('dc8690e407183eeb7a6af0e7692d6e0a1cd323d51dd1aa492522c421b1924ea0'
+            '4a9e271bb9a6af8d564e4d5800e4fff36224f1697b923a7253659bdda80dc590')
 
 build() {
-  _kernver="$(cat /usr/lib/modules/${_extramodules}/version)"
+  cd "${srcdir}/spl-${pkgver}"
+  ./autogen.sh
+  sed -i "s|\$(uname -r)|${_kernver}|g" configure
+  ./configure --prefix=/usr --libdir=/usr/lib --sbindir=/usr/bin \
+              --with-linux=/usr/lib/modules/${_kernver}/build \
+              --with-config=kernel
+  make
+  cd "${srcdir}/zfs-${pkgver}"
+  ./autogen.sh
+  sed -i "s|\$(uname -r)|${_kernver}|g" configure
+  ./configure --prefix=/usr --sysconfdir=/etc --sbindir=/usr/bin --libdir=/usr/lib \
+              --datadir=/usr/share --includedir=/usr/include --with-udevdir=/lib/udev \
+              --libexecdir=/usr/lib/zfs-${pkgver} --with-config=kernel \
+              --with-linux=/usr/lib/modules/${_kernver}/build \
+              --with-spl-obj=${srcdir}/spl-${pkgver}
+  make
+}
 
-  # build host modules
-  msg2 'Build modules'
-  dkms --dkmsframework dkms.conf build "spl/$pkgver" -k "$_kernver" --verbose
-  dkms --dkmsframework dkms.conf build "zfs/$pkgver" -k "$_kernver" --verbose
+package_linux-rt-manjaro-spl(){
+  _pkgname=spl
+  pkgdesc='Solaris Porting Layer kernel modules.'
+  provides=("$_pkgname=$pkgver")
+  depends+=("spl-utils=${pkgver}")
+
+  cd "${srcdir}/spl-${pkgver}"
+  install -dm755 "$pkgdir/usr/lib/modules/$_extramodules"
+  install -m644 module/*/*.ko "$pkgdir/usr/lib/modules/$_extramodules"
+  find "$pkgdir" -name '*.ko' -exec gzip -9 {} +
+  sed -i -e "s/EXTRAMODULES='.*'/EXTRAMODULES='$_extramodules'/" "$startdir/install"
 }
 
 package_linux-rt-manjaro-zfs(){
@@ -38,26 +58,10 @@ package_linux-rt-manjaro-zfs(){
   provides=("$_pkgname=$pkgver")
   depends+=("$_linuxprefix-spl" "zfs-utils=${pkgver}")
 
-  _kernver="$(cat /usr/lib/modules/${_extramodules}/version)"
-
+  cd "${srcdir}/zfs-${pkgver}"
   install -dm755 "$pkgdir/usr/lib/modules/$_extramodules"
-  cd "dkms/zfs/$pkgver/$_kernver/$CARCH/module"
-  install -m644 * "$pkgdir/usr/lib/modules/$_extramodules"
+  install -m644 module/*/*.ko "$pkgdir/usr/lib/modules/$_extramodules"
   find "$pkgdir" -name '*.ko' -exec gzip -9 {} +
-  sed -i -e "s/EXTRAMODULES='.*'/EXTRAMODULES='$_extramodules'/" "$startdir/spl_zfs.install"
+  sed -i -e "s/EXTRAMODULES='.*'/EXTRAMODULES='$_extramodules'/" "$startdir/install"
 }
 
-package_linux-rt-manjaro-spl(){
-  _pkgname=spl
-  pkgdesc='Solaris Porting Layer kernel modules.'
-  provides=("$_pkgname=$pkgver")
-  depends+=('kmod' "spl-utils=${pkgver}")
-
-  _kernver="$(cat /usr/lib/modules/${_extramodules}/version)"
-
-  install -dm755 "$pkgdir/usr/lib/modules/$_extramodules"
-  cd "dkms/spl/$pkgver/$_kernver/$CARCH/module"
-  install -m644 * "$pkgdir/usr/lib/modules/$_extramodules"
-  find "$pkgdir" -name '*.ko' -exec gzip -9 {} +
-  sed -i -e "s/EXTRAMODULES='.*'/EXTRAMODULES='$_extramodules'/" "$startdir/spl_zfs.install"
-}
