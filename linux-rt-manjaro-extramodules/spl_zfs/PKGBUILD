@@ -35,7 +35,7 @@ build() {
               --datadir=/usr/share --includedir=/usr/include --with-udevdir=/lib/udev \
               --libexecdir=/usr/lib/zfs-${pkgver} --with-config=kernel \
               --with-linux=/usr/lib/modules/${_kernver}/build \
-              --with-spl-obj=${srcdir}/spl-${pkgver}
+              --with-spl=${srcdir}/spl-${pkgver}
   make
 }
 
