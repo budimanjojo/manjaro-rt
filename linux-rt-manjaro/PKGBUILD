@@ -50,7 +50,7 @@ source=(https://github.com/torvalds/linux/archive/v${_basekernel}.tar.gz
         'fix-race-in-PRT-wait-for-completion-simple-wait-code_Nvidia-RT-160319.patch'
 )
 sha256sums=('1f2bcc9167668eca62fda7d22b6dd07052c87420bacc6d47d451ed6d441daf61'
-            '036f83f8a3475d9e7e0b8edc188f9a4f495abc3b187ed87748cdbc063c0c419f'
+            '0dc509a19c68ab547a62158bf2017965b843854b63be46ae039c37724dccca21'
             '53fd8b393c521c3d46a914dde95535013cd68a4e296c8279519630edfaee41e6'
             'f423ec4e9c80037017722dbff1c560bc506893149f9e32bf16e39df0b70066eb'
             '8bcd31f3a15825d197e00da85a452ee75448c428991796e4a66bd4dce70a11b4'
