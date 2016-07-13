@@ -30,7 +30,7 @@ source=(https://github.com/torvalds/linux/archive/v${_basekernel}.tar.gz
         'config.x86_64'
         'config.rt'
         # standard config files for mkinitcpio ramdisk
-        "linux${_basever}.preset"
+        "${pkgname}.preset"
         'http://sources.gentoo.org/cgi-bin/viewvc.cgi/linux-patches/genpatches-2.6/trunk/3.15/1700_enable-thinkpad-micled.patch'
         'http://sources.gentoo.org/cgi-bin/viewvc.cgi/linux-patches/genpatches-2.6/trunk/3.15/2700_ThinkPad-30-brightness-control-fix.patch'
         "0001-block-cgroups-kconfig-build-bits-for-BFQ-${_bfq}.patch::ftp://teambelgium.net/bfq/patches/4.4.0-${_bfq}/0001-block-cgroups-kconfig-build-bits-for-BFQ-${_bfq}-4.4.0.patch"
@@ -193,7 +193,7 @@ package_linux-rt-manjaro() {
   depends=('coreutils' 'linux-firmware' 'kmod' 'mkinitcpio>=0.7')
   optdepends=('crda: to set the correct wireless channels of your country')
   provides=("linux=${pkgver}")
-  install=linux${_basever}.install
+  install=${pkgname}.install
 
   cd "${srcdir}/${_srcname}"
 
@@ -208,9 +208,9 @@ package_linux-rt-manjaro() {
 
   # add kernel version
   if [ "${CARCH}" = "x86_64" ]; then
-     echo "${_pkgver}-${pkgrel}-${_rtpatchver}-MANJARO x64" > "${pkgdir}/boot/linux${_basever}-${CARCH}.kver"
+     echo "${_pkgver}-${pkgrel}-${_rtpatchver}-MANJARO x64" > "${pkgdir}/boot/${pkgbase}-${CARCH}.kver"
   else
-     echo "${_pkgver}-${pkgrel}-${_rtpatchver}-MANJARO x32" > "${pkgdir}/boot/linux${_basever}-${CARCH}.kver"
+     echo "${_pkgver}-${pkgrel}-${_rtpatchver}-MANJARO x32" > "${pkgdir}/boot/${pkgbase}-${CARCH}.kver"
   fi
 
   # set correct depmod command for install
@@ -225,12 +225,12 @@ package_linux-rt-manjaro() {
     -i "${startdir}/${install}"
 
   # install mkinitcpio preset file for kernel
-  install -D -m644 "${srcdir}/linux${_basever}.preset" "${pkgdir}/etc/mkinitcpio.d/linux${_basever}.preset"
+  install -D -m644 "${srcdir}/${pkgname}.preset" "${pkgdir}/etc/mkinitcpio.d/${pkgname}.preset"
   sed \
     -e "s|ALL_kver=.*|ALL_kver=\"/boot/vmlinuz-${_basekernel}${_kernelname}-${CARCH}\"|g" \
     -e "s|default_image=.*|default_image=\"/boot/initramfs-${_basekernel}${_kernelname}-${CARCH}.img\"|g" \
     -e "s|fallback_image=.*|fallback_image=\"/boot/initramfs-${_basekernel}${_kernelname}-${CARCH}-fallback.img\"|g" \
-    -i "${pkgdir}/etc/mkinitcpio.d/linux${_basever}.preset"
+    -i "${pkgdir}/etc/mkinitcpio.d/${pkgname}.preset"
 
   # remove build and source links
   rm -f "${pkgdir}"/lib/modules/${_kernver}/{source,build}
