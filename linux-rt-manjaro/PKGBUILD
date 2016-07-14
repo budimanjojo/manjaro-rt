@@ -220,7 +220,7 @@ package_linux-rt-manjaro() {
     -e  "s/RELEASE=.*/RELEASE=${_pkgver}-${pkgrel}-${_rtpatchver}/g" \
     -e  "s/KERNEL_VERSION=.*/KERNEL_VERSION=${_kernver}/g" \
     -e  "s/KERNEL_BASE=.*/KERNEL_BASE=${_basekernel}${_kernelname}/g" \
-    -e  "s/BASEVER=.*/BASEVER=${_basever}/g" \
+    -e  "s/BASEVER=.*/BASEVER=${_kernelname}-manjaro/g" \
     -e  "s/ARCH=.*/ARCH=${CARCH}/g" \
     -i "${startdir}/${install}"
 
