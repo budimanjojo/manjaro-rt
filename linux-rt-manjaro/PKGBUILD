@@ -15,7 +15,7 @@ _basever=46-rt
 _pkgver=${_basekernel}.4
 _pkgverrt=4.6.4
 _bfq=v7r11
-_rtpatchver=rt7
+_rtpatchver=rt8
 pkgver=${_pkgver}_${_rtpatchver}
 pkgrel=1
 arch=('i686' 'x86_64')
@@ -64,7 +64,7 @@ sha256sums=('1f2bcc9167668eca62fda7d22b6dd07052c87420bacc6d47d451ed6d441daf61'
             '3c158ebe93e3710d9a669015f0868f89c5170efdc36cb7cf5f46cc85df61ad3e'
             '030deb6b46cea9a3f037b03af4e53d27aa70537d42c535cf30db5c02e4a8ab43'
             'af8f29631892bd3bb2654ff7b701f80f438832fd68a5e18896ef3ffe98363b9d'
-            'f5dcc15edf7caaeb0c9facf463f0894e6327f4d75162265a219a0c9a83cf638d'
+            '663e11a98b4bde339223b58e4f1bf9b3c6cd8588aa63946a542a2c7385a54cd5'
             'SKIP'
             '85f7612edfa129210343d6a4fe4ba2a4ac3542d98b7e28c8896738e7e6541c06')
 
