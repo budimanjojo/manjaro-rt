@@ -1,6 +1,6 @@
 # Maintainer: Budiman JoJo <budimanjojo@gmail.com>
 # Maintainer: Bernhard Landauer <oberon@manjaro.org>
-# Contributor:  Joakim Hernberg <jbh@alchemy.lu>
+# Contributor: Joakim Hernberg <jbh@alchemy.lu>
 # Contributor: Ray Rashif <schiv@archlinux.org>
 # Contributor: timbosa <tinny_tim@dodo.com.au>
 # Contributor: Tobias Powalowski <tpowa@archlinux.org>
@@ -29,6 +29,7 @@ source=(https://github.com/torvalds/linux/archive/v${_basekernel}.tar.gz
         'config'
         'config.x86_64'
         'config.rt'
+        'config.no_hz'
         # standard config files for mkinitcpio ramdisk
         "${pkgname}.preset"
         'http://sources.gentoo.org/cgi-bin/viewvc.cgi/linux-patches/genpatches-2.6/trunk/3.15/1700_enable-thinkpad-micled.patch'
@@ -53,6 +54,7 @@ sha256sums=('1f2bcc9167668eca62fda7d22b6dd07052c87420bacc6d47d451ed6d441daf61'
             '53fd8b393c521c3d46a914dde95535013cd68a4e296c8279519630edfaee41e6'
             'f423ec4e9c80037017722dbff1c560bc506893149f9e32bf16e39df0b70066eb'
             '3a7ca1edecbda5fc1bdcb89c481dc30eda2a82259e76df354d5650f364c36017'
+            'ca4712f892ec934e660a0423bd5198f5a02fcb81557f608df8318247cc2f28ba'
             '8e05eb21098e4ced73461e3e6b18e6776ad1b4bd4999f526e93c6cf7a025e120'
             '461aa0da7de8bda9474797339532304894b55825be34f8c009244da8c00c5b41'
             'a3f85c3c35ee478fd174f8aaa6ca15e5fad8612b42ca4d90cc3ef79b49a99989'
@@ -154,6 +156,15 @@ prepare() {
   sed -i "/CONFIG_MUTEX_SPIN_ON_OWNER=y/d" ./.config
   sed -i "/CONFIG_RWSEM_SPIN_ON_OWNER=y/d" ./.config
   sed -i "/CONFIG_LOCK_SPIN_ON_OWNER=y/d" ./.config
+  
+  # Reducing Scheduling-Clock Ticks, configure NO_HZ
+  sed -i "s|CONFIG_NO_HZ_IDLE=y|# CONFIG_NO_HZ_IDLE is not set|g" ./.config
+  sed -i "s|# CONFIG_NO_HZ_FULL is not set|CONFIG_NO_HZ_FULL=y|g" ./.config
+  sed -i "/CONFIG_TICK_CPU_ACCOUNTING=y/d" ./.config
+  sed -i "s|# CONFIG_VIRT_CPU_ACCOUNTING_GEN is not set|CONFIG_VIRT_CPU_ACCOUNTING_GEN=y|g" ./.config
+  sed -i "s|# CONFIG_IRQ_TIME_ACCOUNTING is not set|CONFIG_VIRT_CPU_ACCOUNTING=y|g" ./.config
+
+  cat "${srcdir}/config.no_hz" >> ./.config
 
   if [ "${_kernelname}" != "" ]; then
     sed -i "s|CONFIG_LOCALVERSION=.*|CONFIG_LOCALVERSION=\"-MANJARO\"|g" ./.config
