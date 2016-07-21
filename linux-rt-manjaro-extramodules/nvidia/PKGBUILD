@@ -9,7 +9,7 @@ _extramodules=extramodules-4.6-rt-MANJARO
 pkgname=$_linuxprefix-nvidia
 _pkgname=nvidia
 pkgver=367.35
-pkgrel=1
+pkgrel=2
 epoch=1
 provides=("$_pkgname=$pkgver")
 groups=("$_linuxprefix-extramodules")
@@ -22,7 +22,6 @@ conflicts=('nvidia-96xx' 'nvidia-173xx')
 license=('custom')
 install=nvidia.install
 options=(!strip)
-# source=(linux46.patch::http://pastebin.com/raw/SEzxqaJD)
 source_i686=("http://us.download.nvidia.com/XFree86/Linux-x86/${pkgver}/NVIDIA-Linux-x86-${pkgver}.run")
 source_x86_64=("http://us.download.nvidia.com/XFree86/Linux-x86_64/${pkgver}/NVIDIA-Linux-x86_64-${pkgver}-no-compat32.run")
 md5sums_i686=('42db6f6485c3c337c7c756380ec64b7a')
@@ -35,7 +34,6 @@ prepare() {
     sh "${_pkg}.run" --extract-only
     cd "${_pkg}"
     # patches here
-#   patch -Np1 -i $srcdir/linux46.patch
 }
 
 build() {
@@ -49,6 +47,8 @@ package() {
         "${pkgdir}/usr/lib/modules/${_extramodules}/nvidia.ko"
     install -D -m644 "${srcdir}/${_pkg}/kernel/nvidia-modeset.ko" \
          "${pkgdir}/usr/lib/modules/${_extramodules}/nvidia-modeset.ko"
+    install -D -m644 "${srcdir}/${_pkg}/kernel/nvidia-drm.ko" \
+         "${pkgdir}/usr/lib/modules/${_extramodules}/nvidia-drm.ko"
     if [[ "$CARCH" = "x86_64" ]]; then
         install -D -m644 "${srcdir}/${_pkg}/kernel/nvidia-uvm.ko" \
             "${pkgdir}/usr/lib/modules/${_extramodules}/nvidia-uvm.ko"
