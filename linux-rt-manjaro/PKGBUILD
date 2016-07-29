@@ -12,10 +12,10 @@ pkgname=('linux-rt-manjaro' 'linux-rt-manjaro-headers')
 _srcname=linux-4.6
 _basekernel=4.6
 _basever=46-rt
-_pkgver=${_basekernel}.4
+_pkgver=${_basekernel}.5
 _pkgverrt=4.6.4
 _bfq=v7r11
-_rtpatchver=rt8
+_rtpatchver=rt7
 pkgver=${_pkgver}_${_rtpatchver}
 pkgrel=1
 arch=('i686' 'x86_64')
@@ -39,7 +39,6 @@ source=(https://github.com/torvalds/linux/archive/v${_basekernel}.tar.gz
         "0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-${_bfq}.patch::ftp://teambelgium.net/bfq/patches/4.4.0-${_bfq}/0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-${_bfq}-for.patch"
         # ARCH Patches
         'change-default-console-loglevel.patch'
-        '0001-linux-4.6-rtlwifi-fix-atomic.patch'
         # MANJARO Patches
         'nvidia-304xx-mtrr-unknown-symbol.patch'
         'revert-intel-asoc.patch'
@@ -50,7 +49,7 @@ source=(https://github.com/torvalds/linux/archive/v${_basekernel}.tar.gz
         'fix-race-in-PRT-wait-for-completion-simple-wait-code_Nvidia-RT-160319.patch'
 )
 sha256sums=('1f2bcc9167668eca62fda7d22b6dd07052c87420bacc6d47d451ed6d441daf61'
-            'f500a3b841c41420914938d681e258c712fbbd7ebec5fe70f0abc071a1738e47'
+            '857df33f085a0116b9d2322ffe3b23d5b7d8c4898427d79f68108a653e84910c'
             '53fd8b393c521c3d46a914dde95535013cd68a4e296c8279519630edfaee41e6'
             'f423ec4e9c80037017722dbff1c560bc506893149f9e32bf16e39df0b70066eb'
             '3a7ca1edecbda5fc1bdcb89c481dc30eda2a82259e76df354d5650f364c36017'
@@ -62,11 +61,10 @@ sha256sums=('1f2bcc9167668eca62fda7d22b6dd07052c87420bacc6d47d451ed6d441daf61'
             'b17c3fb18c5b8c20a45a38198f293679ca6aef08d16f12cd816a5cfafac4b2c4'
             '69a21bc286a628128cfc4723558829cb6ff6c2d7c4dfd4468457898674187b25'
             '44e7e15c95af9676f715569e72688fd64304a70d2854b0f804c156d4961c72c0'
-            'ae0d16e81a915fae130125ba9d0b6fd2427e06f50b8b9514abc4029efe61ee98'
             '3c158ebe93e3710d9a669015f0868f89c5170efdc36cb7cf5f46cc85df61ad3e'
             '030deb6b46cea9a3f037b03af4e53d27aa70537d42c535cf30db5c02e4a8ab43'
             'af8f29631892bd3bb2654ff7b701f80f438832fd68a5e18896ef3ffe98363b9d'
-            '663e11a98b4bde339223b58e4f1bf9b3c6cd8588aa63946a542a2c7385a54cd5'
+            'f5dcc15edf7caaeb0c9facf463f0894e6327f4d75162265a219a0c9a83cf638d'
             'SKIP'
             '85f7612edfa129210343d6a4fe4ba2a4ac3542d98b7e28c8896738e7e6541c06')
 
@@ -76,6 +74,13 @@ validpgpkeys=('64254695FFF0AA4466CC19E67B96E8162A8CF5D1' # Sebastian Andrzej Sie
 _kernelname=${pkgbase#linux}
 
 prepare() {
+
+  cd "${srcdir}"
+  # fix rt-patch for 4.6.5
+  mv patch-4.6.4-rt7.patch patch-4.6.5-rt7.patch
+  sed -i "s|defined(CONFIG_SMP) \|\| defined(CONFIG_DEBUG_MUTEXES)|defined(CONFIG_DEBUG_MUTEXES) \|\| defined(CONFIG_MUTEX_SPIN_ON_OWNER)|g" patch-4.6.5-rt7.patch
+  _pkgverrt=4.6.5
+  
   cd "${srcdir}/${_srcname}"
 
   # add upstream patch
@@ -83,7 +88,7 @@ prepare() {
 
   # add latest fixes from stable queue, if needed
   # http://git.kernel.org/?p=linux/kernel/git/stable/stable-queue.git
-
+  
   # Add RT patch
   msg "applying patch-${_pkgverrt}-${_rtpatchver}.patch"
   patch -p1 -i "${srcdir}/patch-${_pkgverrt}-${_rtpatchver}.patch"
@@ -93,11 +98,6 @@ prepare() {
   # (relevant patch sent upstream: https://lkml.org/lkml/2011/7/26/227)
   msg "change-default-console-loglevel.patch"
   patch -p1 -i "${srcdir}/change-default-console-loglevel.patch"
-
-  # fix rtlwifi atomic
-  # https://bugs.archlinux.org/task/49401
-  msg "0001-linux-4.6-rtlwifi-fix-atomic.patch"
-  patch -p1 -i "${srcdir}/0001-linux-4.6-rtlwifi-fix-atomic.patch"
 
   # A patch to fix a problem that ought to be fixed in the NVIDIA source code.
   # Stops X from hanging on certain NVIDIA cards
@@ -157,14 +157,14 @@ prepare() {
   sed -i "/CONFIG_RWSEM_SPIN_ON_OWNER=y/d" ./.config
   sed -i "/CONFIG_LOCK_SPIN_ON_OWNER=y/d" ./.config
   
-  # Reducing Scheduling-Clock Ticks, configure NO_HZ
-  sed -i "s|CONFIG_NO_HZ_IDLE=y|# CONFIG_NO_HZ_IDLE is not set|g" ./.config
-  sed -i "s|# CONFIG_NO_HZ_FULL is not set|CONFIG_NO_HZ_FULL=y|g" ./.config
-  sed -i "/CONFIG_TICK_CPU_ACCOUNTING=y/d" ./.config
-  sed -i "s|# CONFIG_VIRT_CPU_ACCOUNTING_GEN is not set|CONFIG_VIRT_CPU_ACCOUNTING_GEN=y|g" ./.config
-  sed -i "s|# CONFIG_IRQ_TIME_ACCOUNTING is not set|CONFIG_VIRT_CPU_ACCOUNTING=y|g" ./.config
+#  # Reducing Scheduling-Clock Ticks, configure NO_HZ
+#  sed -i "s|CONFIG_NO_HZ_IDLE=y|# CONFIG_NO_HZ_IDLE is not set|g" ./.config
+#  sed -i "s|# CONFIG_NO_HZ_FULL is not set|CONFIG_NO_HZ_FULL=y|g" ./.config
+#  sed -i "/CONFIG_TICK_CPU_ACCOUNTING=y/d" ./.config
+#  sed -i "s|# CONFIG_VIRT_CPU_ACCOUNTING_GEN is not set|CONFIG_VIRT_CPU_ACCOUNTING_GEN=y|g" ./.config
+#  sed -i "s|# CONFIG_IRQ_TIME_ACCOUNTING is not set|CONFIG_VIRT_CPU_ACCOUNTING=y|g" ./.config
 
-  cat "${srcdir}/config.no_hz" >> ./.config
+#  cat "${srcdir}/config.no_hz" >> ./.config
 
   if [ "${_kernelname}" != "" ]; then
     sed -i "s|CONFIG_LOCALVERSION=.*|CONFIG_LOCALVERSION=\"-MANJARO\"|g" ./.config
