@@ -9,7 +9,9 @@
 _linuxprefix=linux-rt-manjaro
 _extramodules=extramodules-4.6-rt-MANJARO
 pkgbase=ndiswrapper
-pkgname=("$_linuxprefix-ndiswrapper" 'ndiswrapper-utils')
+pkgname=("$_linuxprefix-ndiswrapper"
+	#'ndiswrapper-utils'
+	)
 _pkgname=ndiswrapper
 groups=("$_linuxprefix-extramodules")
 pkgver=1.59

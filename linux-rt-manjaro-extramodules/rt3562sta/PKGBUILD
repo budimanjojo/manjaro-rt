@@ -8,7 +8,9 @@
 _linuxprefix=linux-rt-manjaro
 _extramodules=extramodules-4.6-rt-MANJARO
 pkgbase=rt3562sta
-pkgname=("$_linuxprefix-rt3562sta" 'rt3562sta-common')
+pkgname=("$_linuxprefix-rt3562sta"
+	#'rt3562sta-common'
+	)
 pkgver=2.4.1.1_r3
 _patchrel=${pkgver/*_r/}
 pkgrel=5
