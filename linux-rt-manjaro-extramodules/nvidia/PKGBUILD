@@ -8,7 +8,7 @@ _linuxprefix=linux-rt-manjaro
 _extramodules=extramodules-4.6-rt-MANJARO
 pkgname=$_linuxprefix-nvidia
 _pkgname=nvidia
-pkgver=367.35
+pkgver=367.36.02
 pkgrel=2
 epoch=1
 provides=("$_pkgname=$pkgver")
@@ -22,13 +22,16 @@ conflicts=('nvidia-96xx' 'nvidia-173xx')
 license=('custom')
 install=nvidia.install
 options=(!strip)
-source_i686=("http://us.download.nvidia.com/XFree86/Linux-x86/${pkgver}/NVIDIA-Linux-x86-${pkgver}.run")
-source_x86_64=("http://us.download.nvidia.com/XFree86/Linux-x86_64/${pkgver}/NVIDIA-Linux-x86_64-${pkgver}-no-compat32.run")
-md5sums_i686=('42db6f6485c3c337c7c756380ec64b7a')
-md5sums_x86_64=('24f1fc19fe10bcc6ff264fb5034c4ccc')
+#durl="http://us.download.nvidia.com/XFree86/Linux-x86/${pkgver}"
+durl="http://developer.download.nvidia.com/assets/opengl/369.00"
+source_i686=("${durl}/NVIDIA-Linux-x86-${pkgver}.run")
+source_x86_64=("${durl}/NVIDIA-Linux-x86_64-${pkgver}.run")
+#source_x86_64=("${durl}/NVIDIA-Linux-x86_64-${pkgver}-no-compat32.run")
+sha256sums_i686=('ca0d6c5b1699005768850ea8b46604232687e47026c96b19e60ddeadd617e458')
+sha256sums_x86_64=('9ad5219a7994be667f7448964040d3f64f73cf6169ada5ac8b58255244b19618')
 
 [[ "$CARCH" = "i686" ]] && _pkg="NVIDIA-Linux-x86-${pkgver}"
-[[ "$CARCH" = "x86_64" ]] && _pkg="NVIDIA-Linux-x86_64-${pkgver}-no-compat32"
+[[ "$CARCH" = "x86_64" ]] && _pkg="NVIDIA-Linux-x86_64-${pkgver}"
 
 prepare() {
     sh "${_pkg}.run" --extract-only

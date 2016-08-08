@@ -15,7 +15,7 @@ _basever=46-rt
 _pkgver=${_basekernel}.5
 _pkgverrt=4.6.5
 _bfq=v7r11
-_rtpatchver=rt9
+_rtpatchver=rt10
 pkgver=${_pkgver}_${_rtpatchver}
 pkgrel=1
 arch=('i686' 'x86_64')
@@ -64,7 +64,7 @@ sha256sums=('1f2bcc9167668eca62fda7d22b6dd07052c87420bacc6d47d451ed6d441daf61'
             '3c158ebe93e3710d9a669015f0868f89c5170efdc36cb7cf5f46cc85df61ad3e'
             '030deb6b46cea9a3f037b03af4e53d27aa70537d42c535cf30db5c02e4a8ab43'
             'af8f29631892bd3bb2654ff7b701f80f438832fd68a5e18896ef3ffe98363b9d'
-            '4beaffb551407909af91db4c7e6e66d1401432de5410f5fa542d1d5d6c918a57'
+            '48f0164a351df853894acfbe1db7a4cff52a0749a901475937eb71047fbfc230'
             'SKIP'
             '85f7612edfa129210343d6a4fe4ba2a4ac3542d98b7e28c8896738e7e6541c06')
 
@@ -150,14 +150,14 @@ prepare() {
   sed -i "/CONFIG_RWSEM_SPIN_ON_OWNER=y/d" ./.config
   sed -i "/CONFIG_LOCK_SPIN_ON_OWNER=y/d" ./.config
   
-#  # Reducing Scheduling-Clock Ticks, configure NO_HZ
-#  sed -i "s|CONFIG_NO_HZ_IDLE=y|# CONFIG_NO_HZ_IDLE is not set|g" ./.config
-#  sed -i "s|# CONFIG_NO_HZ_FULL is not set|CONFIG_NO_HZ_FULL=y|g" ./.config
-#  sed -i "/CONFIG_TICK_CPU_ACCOUNTING=y/d" ./.config
-#  sed -i "s|# CONFIG_VIRT_CPU_ACCOUNTING_GEN is not set|CONFIG_VIRT_CPU_ACCOUNTING_GEN=y|g" ./.config
-#  sed -i "s|# CONFIG_IRQ_TIME_ACCOUNTING is not set|CONFIG_VIRT_CPU_ACCOUNTING=y|g" ./.config
+  # Reducing Scheduling-Clock Ticks, configure NO_HZ
+  sed -i "s|CONFIG_NO_HZ_IDLE=y|# CONFIG_NO_HZ_IDLE is not set|g" ./.config
+  sed -i "s|# CONFIG_NO_HZ_FULL is not set|CONFIG_NO_HZ_FULL=y|g" ./.config
+  sed -i "/CONFIG_TICK_CPU_ACCOUNTING=y/d" ./.config
+  sed -i "s|# CONFIG_VIRT_CPU_ACCOUNTING_GEN is not set|CONFIG_VIRT_CPU_ACCOUNTING_GEN=y|g" ./.config
+  sed -i "s|# CONFIG_IRQ_TIME_ACCOUNTING is not set|CONFIG_VIRT_CPU_ACCOUNTING=y|g" ./.config
 
-#  cat "${srcdir}/config.no_hz" >> ./.config
+  cat "${srcdir}/config.no_hz" >> ./.config
 
   if [ "${_kernelname}" != "" ]; then
     sed -i "s|CONFIG_LOCALVERSION=.*|CONFIG_LOCALVERSION=\"-MANJARO\"|g" ./.config

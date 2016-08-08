@@ -1,11 +1,11 @@
 #!/bin/bash
 # This file should be updated after every kernel build.
 #
-# If the checksum changes for one of the kernel, all extra
+# If the checksum changes for one of the kernels, all extra
 # modules need to be recompiled. 
 #
-# In rare cases extra modules need to been recompliled, 
-# even if the checksum is same.
+# In rare cases extra modules need to be recompiled, 
+# even if the checksum is the same.
 #
 # Please also test your system with at least one virtualbox
 # module installed

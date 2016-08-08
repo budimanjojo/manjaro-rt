@@ -15,7 +15,7 @@ pkgname=("$_linuxprefix-ndiswrapper"
 _pkgname=ndiswrapper
 groups=("$_linuxprefix-extramodules")
 pkgver=1.59
-pkgrel=5
+pkgrel=7
 pkgdesc="Module for NDIS (Windows Network Drivers) drivers supplied by vendors."
 license=('GPL')
 arch=('i686' 'x86_64')
@@ -76,7 +76,7 @@ package_linux-rt-manjaro-ndiswrapper() {
 
 package_ndiswrapper-utils() {
   pkgdesc="Utils for NDIS (Windows Network Drivers) drivers supplied by vendors."
-  pkgrel=5
+  pkgrel=7
   depends=()
   groups=()
   cd $srcdir/tmp-ndis-utils
