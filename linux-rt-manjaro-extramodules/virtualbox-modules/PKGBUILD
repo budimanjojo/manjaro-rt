@@ -3,16 +3,15 @@
 # Sébastien Luttringer <seblu@aur.archlinux.org>
 
 # Maintainer: Philip Müller <philm@manjaro.org>
-# Maintainer: Guinux <guillaume@manjaro.org>
-# Maintainer: Roland Singer <roland@manjaro.org>
+# Maintainer: Bernhard Landauer <oberon@manjaro.org>
 
 _linuxprefix=linux-rt-manjaro
 _extramodules=extramodules-4.6-rt-MANJARO
 pkgbase=$_linuxprefix-virtualbox-modules
 pkgname=("$_linuxprefix-virtualbox-host-modules" "$_linuxprefix-virtualbox-guest-modules")
-pkgver=5.1.2
+pkgver=5.1.4
+pkgrel=1
 _pkgver="${pkgver}_OSE"
-pkgrel=3
 arch=('i686' 'x86_64')
 url='http://virtualbox.org'
 license=('GPL')

@@ -1,20 +1,20 @@
 # Based on the file created for Arch Linux by:
 # Maintainer : Thomas Baechler <thomas@archlinux.org>
-# Maintainer: Philip Müller <philm@manjaro.org>
-# Maintainer: Roland Singer <roland@manjaro.org>
 
+# Maintainer: Philip Müller <philm@manjaro.org>
+# Maintainer: Bernhard Landauer <oberon@manjaro.org>
 
 _linuxprefix=linux-rt-manjaro
 _extramodules=extramodules-4.6-rt-MANJARO
 pkgname=$_linuxprefix-nvidia
 _pkgname=nvidia
-pkgver=367.36.02
-pkgrel=2
+pkgver=370.23
+pkgrel=1
 epoch=1
 provides=("$_pkgname=$pkgver")
 groups=("$_linuxprefix-extramodules")
 pkgdesc="NVIDIA drivers for linux."
-arch=('i686' 'x86_64')
+arch=('x86_64')
 url="http://www.nvidia.com/"
 depends=("$_linuxprefix" "nvidia-utils=${epoch}:${pkgver}")
 makedepends=("$_linuxprefix-headers")
@@ -22,21 +22,20 @@ conflicts=('nvidia-96xx' 'nvidia-173xx')
 license=('custom')
 install=nvidia.install
 options=(!strip)
-#durl="http://us.download.nvidia.com/XFree86/Linux-x86/${pkgver}"
-durl="http://developer.download.nvidia.com/assets/opengl/369.00"
-source_i686=("${durl}/NVIDIA-Linux-x86-${pkgver}.run")
-source_x86_64=("${durl}/NVIDIA-Linux-x86_64-${pkgver}.run")
-#source_x86_64=("${durl}/NVIDIA-Linux-x86_64-${pkgver}-no-compat32.run")
-sha256sums_i686=('ca0d6c5b1699005768850ea8b46604232687e47026c96b19e60ddeadd617e458')
-sha256sums_x86_64=('9ad5219a7994be667f7448964040d3f64f73cf6169ada5ac8b58255244b19618')
+durl="http://us.download.nvidia.com/XFree86/Linux-x86"
+#durl="http://developer.download.nvidia.com/assets/opengl/369.00"
+#source=("${durl}_64/${pkgver}/NVIDIA-Linux-x86_64-${pkgver}.run")
+source=("${durl}_64/${pkgver}/NVIDIA-Linux-x86_64-${pkgver}-no-compat32.run")
+sha256sums=('6c462f240ed434a1bb64b7b82a325c63b9056cc135dfe6d54473c9afedbf9693')
 
-[[ "$CARCH" = "i686" ]] && _pkg="NVIDIA-Linux-x86-${pkgver}"
-[[ "$CARCH" = "x86_64" ]] && _pkg="NVIDIA-Linux-x86_64-${pkgver}"
+#_pkg="NVIDIA-Linux-x86_64-${pkgver}"
+_pkg="NVIDIA-Linux-x86_64-${pkgver}-no-compat32"
 
 prepare() {
     sh "${_pkg}.run" --extract-only
     cd "${_pkg}"
     # patches here
+    sed -i -e 's|MODULE_LICENSE("MIT")|MODULE_LICENSE("GPL")|g' kernel/nvidia-drm/nvidia-drm-linux.c
 }
 
 build() {
