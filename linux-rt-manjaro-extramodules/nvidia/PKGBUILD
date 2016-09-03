@@ -23,10 +23,10 @@ license=('custom')
 install=nvidia.install
 options=(!strip)
 durl="http://us.download.nvidia.com/XFree86/Linux-x86"
-#durl="http://developer.download.nvidia.com/assets/opengl/369.00"
 #source=("${durl}_64/${pkgver}/NVIDIA-Linux-x86_64-${pkgver}.run")
 source=("${durl}_64/${pkgver}/NVIDIA-Linux-x86_64-${pkgver}-no-compat32.run")
-sha256sums=('6c462f240ed434a1bb64b7b82a325c63b9056cc135dfe6d54473c9afedbf9693')
+source=('fix-abi.patch')
+sha256sums=('51317ed14937e934fdc13f814f36804275265d0912cce45714e1e4c9e911b3bb')
 
 #_pkg="NVIDIA-Linux-x86_64-${pkgver}"
 _pkg="NVIDIA-Linux-x86_64-${pkgver}-no-compat32"
@@ -35,6 +35,7 @@ prepare() {
     sh "${_pkg}.run" --extract-only
     cd "${_pkg}"
     # patches here
+    patch -Np0 -i ../fix-abi.patch
     sed -i -e 's|MODULE_LICENSE("MIT")|MODULE_LICENSE("GPL")|g' kernel/nvidia-drm/nvidia-drm-linux.c
 }
 
