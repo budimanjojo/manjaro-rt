@@ -15,9 +15,9 @@ _basever=46-rt
 _pkgver=${_basekernel}.7
 _pkgverrt=$_pkgver
 _bfq=v7r11
-_rtpatchver=rt11
+_rtpatchver=rt12
 pkgver=${_pkgver}_${_rtpatchver}
-pkgrel=2
+pkgrel=1
 arch=('i686' 'x86_64')
 url="http://www.kernel.org/"
 license=('GPL2')
@@ -46,8 +46,7 @@ source=(https://github.com/torvalds/linux/archive/v${_basekernel}.tar.gz
         # RT Patch
         "https://www.kernel.org/pub/linux/kernel/projects/rt/${_basekernel}/older/patch-${_pkgverrt}-${_rtpatchver}.patch.xz"
         "https://www.kernel.org/pub/linux/kernel/projects/rt/${_basekernel}/older/patch-${_pkgverrt}-${_rtpatchver}.patch.sign"
-        'fix-race-in-PRT-wait-for-completion-simple-wait-code_Nvidia-RT-160319.patch'
-        'fix_dcache.patch')
+        'fix-race-in-PRT-wait-for-completion-simple-wait-code_Nvidia-RT-160319.patch')
 sha256sums=('1f2bcc9167668eca62fda7d22b6dd07052c87420bacc6d47d451ed6d441daf61'
             'e06e9f84571856b02eb5c1d399e120a7ae8d618e4b444009dd53c9ca8f89fa11'
             '53fd8b393c521c3d46a914dde95535013cd68a4e296c8279519630edfaee41e6'
@@ -64,10 +63,9 @@ sha256sums=('1f2bcc9167668eca62fda7d22b6dd07052c87420bacc6d47d451ed6d441daf61'
             '3c158ebe93e3710d9a669015f0868f89c5170efdc36cb7cf5f46cc85df61ad3e'
             '030deb6b46cea9a3f037b03af4e53d27aa70537d42c535cf30db5c02e4a8ab43'
             'af8f29631892bd3bb2654ff7b701f80f438832fd68a5e18896ef3ffe98363b9d'
-            '49ef783f4de2d57165135083a1b84cea1aab4e8f8f44571e2d7565448c69c3db'
+            '33afdc9ab502da888b38fe59b64f9c7caa0c2781148f4c8ba883ffd6a58eb472'
             'SKIP'
-            '85f7612edfa129210343d6a4fe4ba2a4ac3542d98b7e28c8896738e7e6541c06'
-            '8b96ecc7c4c1dc5fc81162d010d69606b590f0feee0563aee875706e0ab4d5f9')
+            '85f7612edfa129210343d6a4fe4ba2a4ac3542d98b7e28c8896738e7e6541c06')
 
 validpgpkeys=('64254695FFF0AA4466CC19E67B96E8162A8CF5D1' # Sebastian Andrzej Siewior
              )
@@ -126,9 +124,6 @@ prepare() {
   # https://github.com/manjaro/packages-core/issues/35
   msg "revert-intel-asoc.patch"
   patch -Rp1 -i "${srcdir}/revert-intel-asoc.patch"
-
-  # add fix dcache patch
-  patch -p1 -i "${srcdir}/fix_dcache.patch"
 
   msg "All patches have successfully been applied"
 

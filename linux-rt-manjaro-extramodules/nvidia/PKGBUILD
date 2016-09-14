@@ -8,7 +8,7 @@ _linuxprefix=linux-rt-manjaro
 _extramodules=extramodules-4.6-rt-MANJARO
 pkgname=$_linuxprefix-nvidia
 _pkgname=nvidia
-pkgver=370.23
+pkgver=370.28
 pkgrel=2
 epoch=1
 provides=("$_pkgname=$pkgver")
@@ -24,9 +24,10 @@ install=nvidia.install
 options=(!strip)
 durl="http://us.download.nvidia.com/XFree86/Linux-x86"
 #source=("${durl}_64/${pkgver}/NVIDIA-Linux-x86_64-${pkgver}.run")
-source=("${durl}_64/${pkgver}/NVIDIA-Linux-x86_64-${pkgver}-no-compat32.run")
-source=('fix-abi.patch')
-sha256sums=('51317ed14937e934fdc13f814f36804275265d0912cce45714e1e4c9e911b3bb')
+source=("${durl}_64/${pkgver}/NVIDIA-Linux-x86_64-${pkgver}-no-compat32.run"
+'fix-abi.patch')
+sha256sums=('f498bcf4ddf05725792bd4a1ca9720a88ade81de27bd27f2f3c313723f11444c'
+            '51317ed14937e934fdc13f814f36804275265d0912cce45714e1e4c9e911b3bb')
 
 #_pkg="NVIDIA-Linux-x86_64-${pkgver}"
 _pkg="NVIDIA-Linux-x86_64-${pkgver}-no-compat32"
@@ -35,7 +36,7 @@ prepare() {
     sh "${_pkg}.run" --extract-only
     cd "${_pkg}"
     # patches here
-    patch -Np0 -i ../fix-abi.patch
+#    patch -Np0 -i ../fix-abi.patch
     sed -i -e 's|MODULE_LICENSE("MIT")|MODULE_LICENSE("GPL")|g' kernel/nvidia-drm/nvidia-drm-linux.c
 }
 
