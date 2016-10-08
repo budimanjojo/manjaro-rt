@@ -9,8 +9,8 @@ _linuxprefix=linux-rt-manjaro
 _extramodules=extramodules-4.6-rt-MANJARO
 pkgbase=$_linuxprefix-virtualbox-modules
 pkgname=("$_linuxprefix-virtualbox-host-modules" "$_linuxprefix-virtualbox-guest-modules")
-pkgver=5.1.4
-pkgrel=3
+pkgver=5.1.6
+pkgrel=2
 _pkgver="${pkgver}_OSE"
 arch=('i686' 'x86_64')
 url='http://virtualbox.org'
@@ -19,7 +19,6 @@ depends=("$_linuxprefix")
 groups=("$_linuxprefix-extramodules")
 makedepends=("virtualbox-host-dkms>=$pkgver"
              "virtualbox-guest-dkms>=$pkgver"
-             'virtualbox-dkms-manjaro'
              'dkms'
              "$_linuxprefix" "$_linuxprefix-headers")
 

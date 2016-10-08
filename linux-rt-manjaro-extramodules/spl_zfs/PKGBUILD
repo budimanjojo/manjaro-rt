@@ -3,35 +3,36 @@
 
 _linuxprefix=linux-rt-manjaro
 _extramodules=extramodules-4.6-rt-MANJARO
-_kernver="$(cat /usr/lib/modules/${_extramodules}/version)"
 pkgbase=$_linuxprefix-spl_zfs
 pkgname=("$_linuxprefix-spl" "$_linuxprefix-zfs")
-pkgver=0.6.5.8
-_pkgver=spl-0.6.5.8
-pkgrel=1
+pkgver=0.7.0_rc1
+_pkgver=0.7.0-rc1
+pkgrel=3
 url="http://zfsonlinux.org/"
+_url="https://github.com/zfsonlinux"
 arch=('i686' 'x86_64')
 license=("CDDL")
 depends=("$_linuxprefix" "kmod")
 makedepends=("$_linuxprefix-headers")
 groups=("$_linuxprefix-extramodules")
 install=install
-source=("http://archive.zfsonlinux.org/downloads/zfsonlinux/spl/spl-${pkgver}.tar.gz"
-        "http://archive.zfsonlinux.org/downloads/zfsonlinux/zfs/zfs-${pkgver}.tar.gz")
-source=("https://github.com/zfsonlinux/spl/archive/spl-${pkgver}.tar.gz"
-        "https://github.com/zfsonlinux/zfs/releases/download/zfs-${pkgver}/zfs-${pkgver}.tar.gz")
-sha256sums=('1b0a625141206711b52023eab40f7187ce2afe5e39e23981805aab19f170853d'
-            'd77f43f7dc38381773e2c34531954c52f3de80361b7bb10c933a7482f89cfe84')
+#source=("http://archive.zfsonlinux.org/downloads/zfsonlinux/spl/spl-${_pkgver}.tar.gz"
+#        "http://archive.zfsonlinux.org/downloads/zfsonlinux/zfs/zfs-${_pkgver}.tar.gz")
+source=("$_url/spl/archive/spl-$_pkgver.tar.gz"
+        "$_url/zfs/archive/zfs-$_pkgver.tar.gz")
+sha256sums=('8f52aceec8e16b6dff032133da3615a69f94a1745453b62362c9bff4b4ac5c0f'
+            '5715eccf3eb22077f3cabf7e3737e2eb61a01544db256a65234ea662a126f1af')
 
 build() {
-  cd "${srcdir}/spl-${_pkgver}"
+  _kernver="$(cat /usr/lib/modules/${_extramodules}/version)"
+  cd "${srcdir}/spl-spl-${_pkgver}"
   ./autogen.sh
   sed -i "s|\$(uname -r)|${_kernver}|g" configure
   ./configure --prefix=/usr --libdir=/usr/lib --sbindir=/usr/bin \
               --with-linux=/usr/lib/modules/${_kernver}/build \
               --with-config=kernel
   make
-  cd "${srcdir}/zfs-${_pkgver}"
+  cd "${srcdir}/zfs-zfs-${_pkgver}"
   ./autogen.sh
   sed -i "s|\$(uname -r)|${_kernver}|g" configure
   ./configure --prefix=/usr --sysconfdir=/etc --sbindir=/usr/bin --libdir=/usr/lib \
