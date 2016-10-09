@@ -52,7 +52,7 @@ sha256sums=('ce9fc13dbfa548a751a583a95f8ee39c9750d479f34c587116bf340f2ef3a493'
             '79c7bda5b4ac4dee7791f34448464f7aa74d498f80df6e1e5ab73f96c5baea41'
             'a9efde59ed7eda3027bd452e44b05655f4590ef00eb91eea1cdc1837bd04062a'
             'f1984ed91b1acccee48254ec81d25b57d20c25f5a32d49870389b35d14ec0011'
-            '3a7ca1edecbda5fc1bdcb89c481dc30eda2a82259e76df354d5650f364c36017'
+            '99750417273c71b9b03b16c4bef4ba8f68cf18c50994a4fcc21f2d380c66eb6c'
             'ca4712f892ec934e660a0423bd5198f5a02fcb81557f608df8318247cc2f28ba'
             '8e05eb21098e4ced73461e3e6b18e6776ad1b4bd4999f526e93c6cf7a025e120'
             '92c55aa0f9529646a07808d661c4a8e02ea326ad374a8441c332a39a2739f876'
@@ -73,10 +73,13 @@ prepare() {
   cd "${srcdir}/${_srcname}"
 
   # add upstream patch
-  #patch -p1 -i "${srcdir}/patch-${_pkgver}"
+  patch -p1 -i "${srcdir}/patch-${_pkgver}"
 
   # add latest fixes from stable queue, if needed
   # http://git.kernel.org/?p=linux/kernel/git/stable/stable-queue.git
+
+  # modifying as already fixed in v4.8.1
+  sed -i -e 's|VM_BUG_ON(!workingset|VM_WARN_ON_ONCE(!workingset|g' "${srcdir}/patch-${_pkgverrt}-${_rtpatchver}.patch"
   
   # Add RT patch
   msg "applying patch-${_pkgverrt}-${_rtpatchver}.patch"
@@ -111,8 +114,7 @@ prepare() {
   #patch -Np1 -i "${srcdir}/0002-block-introduce-the-BFQ-${_bfq}-I-O-sched.patch"
   #msg "0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-${_bfq}.patch"
   #patch -Np1 -i "${srcdir}/0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-${_bfq}.patch"
-  #sed -i -e "s|SUBLEVEL = 0|SUBLEVEL = 1|g" "${srcdir}/0001-BFQ-${_bfq}-v${pkgver}.patch"
-  #sed -i -e "s|EXTRAVERSION = -bfq|EXTRAVERSION = -rt1|g" "${srcdir}/0001-BFQ-${_bfq}-v${pkgver}.patch"
+  sed -i -e "s|SUBLEVEL = 0|SUBLEVEL = 1|g" "${srcdir}/0001-BFQ-${_bfq}-v${pkgver}.patch"
   patch -Np1 -i "${srcdir}/0001-BFQ-${_bfq}-v${pkgver}.patch"
 
   # Fix Nvidia 304xx issue
