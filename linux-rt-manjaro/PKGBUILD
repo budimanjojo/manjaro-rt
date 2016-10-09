@@ -9,13 +9,13 @@
 #pkgbase=linux               # Build stock -ARCH kernel
 pkgbase=linux-rt             # Build kernel with a different name
 pkgname=('linux-rt-manjaro' 'linux-rt-manjaro-headers')
-_srcname=linux-4.6
-_basekernel=4.6
-_basever=46-rt
-_pkgver=${_basekernel}.7
+_srcname=linux-4.8
+_basekernel=4.8
+_basever=48-rt
+_pkgver=${_basekernel}
 _pkgverrt=$_pkgver
-_bfq=v7r11
-_rtpatchver=rt14
+_bfq=v8r3
+_rtpatchver=rt1
 pkgver=${_pkgver}_${_rtpatchver}
 pkgrel=1
 arch=('i686' 'x86_64')
@@ -32,11 +32,12 @@ source=(https://github.com/torvalds/linux/archive/v${_basekernel}.tar.gz
         'config.no_hz'
         # standard config files for mkinitcpio ramdisk
         "${pkgname}.preset"
-		'http://dev.gentoo.org/~mpagano/genpatches/trunk/3.15/1700_enable-thinkpad-micled.patch'
-		'http://dev.gentoo.org/~mpagano/genpatches/trunk/3.15/2700_ThinkPad-30-brightness-control-fix.patch'
-        "0001-block-cgroups-kconfig-build-bits-for-BFQ-${_bfq}.patch::ftp://teambelgium.net/bfq/patches/4.4.0-${_bfq}/0001-block-cgroups-kconfig-build-bits-for-BFQ-${_bfq}-4.4.0.patch"
-        "0002-block-introduce-the-BFQ-${_bfq}-I-O-sched.patch::ftp://teambelgium.net/bfq/patches/4.4.0-${_bfq}/0002-block-introduce-the-BFQ-${_bfq}-I-O-sched-for-4.4.0.patch"
-        "0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-${_bfq}.patch::ftp://teambelgium.net/bfq/patches/4.4.0-${_bfq}/0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-${_bfq}-for.patch"
+		#'http://dev.gentoo.org/~mpagano/genpatches/trunk/3.15/1700_enable-thinkpad-micled.patch'
+		#'http://dev.gentoo.org/~mpagano/genpatches/trunk/3.15/2700_ThinkPad-30-brightness-control-fix.patch'
+        #"0001-block-cgroups-kconfig-build-bits-for-BFQ-${_bfq}.patch::ftp://teambelgium.net/bfq/patches/4.4.0-${_bfq}/0001-block-cgroups-kconfig-build-bits-for-BFQ-${_bfq}-4.4.0.patch"
+        #"0002-block-introduce-the-BFQ-${_bfq}-I-O-sched.patch::ftp://teambelgium.net/bfq/patches/4.4.0-${_bfq}/0002-block-introduce-the-BFQ-${_bfq}-I-O-sched-for-4.4.0.patch"
+        #"0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-${_bfq}.patch::ftp://teambelgium.net/bfq/patches/4.4.0-${_bfq}/0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-${_bfq}-for.patch"
+        "0001-BFQ-${_bfq}-v${pkgver}.patch::https://github.com/linusw/linux-bfq/compare/c8d2bc9...0e3911e.patch"
         # ARCH Patches
         'change-default-console-loglevel.patch'
         # MANJARO Patches
@@ -47,23 +48,19 @@ source=(https://github.com/torvalds/linux/archive/v${_basekernel}.tar.gz
         "https://www.kernel.org/pub/linux/kernel/projects/rt/${_basekernel}/older/patch-${_pkgverrt}-${_rtpatchver}.patch.xz"
         "https://www.kernel.org/pub/linux/kernel/projects/rt/${_basekernel}/older/patch-${_pkgverrt}-${_rtpatchver}.patch.sign"
         'fix-race-in-PRT-wait-for-completion-simple-wait-code_Nvidia-RT-160319.patch')
-sha256sums=('1f2bcc9167668eca62fda7d22b6dd07052c87420bacc6d47d451ed6d441daf61'
-            'e06e9f84571856b02eb5c1d399e120a7ae8d618e4b444009dd53c9ca8f89fa11'
-            '53fd8b393c521c3d46a914dde95535013cd68a4e296c8279519630edfaee41e6'
-            'f423ec4e9c80037017722dbff1c560bc506893149f9e32bf16e39df0b70066eb'
+sha256sums=('ce9fc13dbfa548a751a583a95f8ee39c9750d479f34c587116bf340f2ef3a493'
+            '79705983331f05944c826219ac117df77923730677aa0a32f7829ad261c0d33b'
+            'a9efde59ed7eda3027bd452e44b05655f4590ef00eb91eea1cdc1837bd04062a'
+            'f1984ed91b1acccee48254ec81d25b57d20c25f5a32d49870389b35d14ec0011'
             '3a7ca1edecbda5fc1bdcb89c481dc30eda2a82259e76df354d5650f364c36017'
             'ca4712f892ec934e660a0423bd5198f5a02fcb81557f608df8318247cc2f28ba'
             '8e05eb21098e4ced73461e3e6b18e6776ad1b4bd4999f526e93c6cf7a025e120'
-            '461aa0da7de8bda9474797339532304894b55825be34f8c009244da8c00c5b41'
-            'a3f85c3c35ee478fd174f8aaa6ca15e5fad8612b42ca4d90cc3ef79b49a99989'
-            'd1cf14cc696b0f716454fe8eb9746383700889d5d22ad829611f0433cc77b4ce'
-            'b17c3fb18c5b8c20a45a38198f293679ca6aef08d16f12cd816a5cfafac4b2c4'
-            '69a21bc286a628128cfc4723558829cb6ff6c2d7c4dfd4468457898674187b25'
+            '92c55aa0f9529646a07808d661c4a8e02ea326ad374a8441c332a39a2739f876'
             '44e7e15c95af9676f715569e72688fd64304a70d2854b0f804c156d4961c72c0'
             '3c158ebe93e3710d9a669015f0868f89c5170efdc36cb7cf5f46cc85df61ad3e'
             '030deb6b46cea9a3f037b03af4e53d27aa70537d42c535cf30db5c02e4a8ab43'
             'af8f29631892bd3bb2654ff7b701f80f438832fd68a5e18896ef3ffe98363b9d'
-            '535c8fec8b03be3e6397ea3d78850be92763cbc2a3faa5a5ca76b48418875a9e'
+            '85d5c766791f3a232770bad50af06a5fb4d2c1d010e18f5750a5288c43132c71'
             'SKIP'
             '85f7612edfa129210343d6a4fe4ba2a4ac3542d98b7e28c8896738e7e6541c06')
 
@@ -76,7 +73,7 @@ prepare() {
   cd "${srcdir}/${_srcname}"
 
   # add upstream patch
-  patch -p1 -i "${srcdir}/patch-${_pkgver}"
+  #patch -p1 -i "${srcdir}/patch-${_pkgver}"
 
   # add latest fixes from stable queue, if needed
   # http://git.kernel.org/?p=linux/kernel/git/stable/stable-queue.git
@@ -102,18 +99,20 @@ prepare() {
   patch -p1 -i "${srcdir}/i8042-asus-x455lab-dmi.patch"
 
   # add Gentoo patches
-  msg "1700_enable-thinkpad-micled.patch"
-  patch -Np1 -i "${srcdir}/1700_enable-thinkpad-micled.patch"
-  msg "2700_ThinkPad-30-brightness-control-fix.patch"
-  patch -Np1 -i "${srcdir}/2700_ThinkPad-30-brightness-control-fix.patch"
+  #msg "1700_enable-thinkpad-micled.patch"
+  #patch -Np1 -i "${srcdir}/1700_enable-thinkpad-micled.patch"
+  #msg "2700_ThinkPad-30-brightness-control-fix.patch"
+  #patch -Np1 -i "${srcdir}/2700_ThinkPad-30-brightness-control-fix.patch"
 
   # add BFQ scheduler
-  msg "0001-block-cgroups-kconfig-build-bits-for-BFQ-${_bfq}.patch"
-  patch -Np1 -i "${srcdir}/0001-block-cgroups-kconfig-build-bits-for-BFQ-${_bfq}.patch"
-  msg "0002-block-introduce-the-BFQ-${_bfq}-I-O-sched.patch"
-  patch -Np1 -i "${srcdir}/0002-block-introduce-the-BFQ-${_bfq}-I-O-sched.patch"
-  msg "0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-${_bfq}.patch"
-  patch -Np1 -i "${srcdir}/0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-${_bfq}.patch"
+  #msg "0001-block-cgroups-kconfig-build-bits-for-BFQ-${_bfq}.patch"
+  #patch -Np1 -i "${srcdir}/0001-block-cgroups-kconfig-build-bits-for-BFQ-${_bfq}.patch"
+  #msg "0002-block-introduce-the-BFQ-${_bfq}-I-O-sched.patch"
+  #patch -Np1 -i "${srcdir}/0002-block-introduce-the-BFQ-${_bfq}-I-O-sched.patch"
+  #msg "0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-${_bfq}.patch"
+  #patch -Np1 -i "${srcdir}/0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-${_bfq}.patch"
+  sed -i -e "s|SUBLEVEL = 0|SUBLEVEL = 1|g" "${srcdir}/0001-BFQ-${_bfq}-v${pkgver}.patch"
+  patch -Np1 -i "${srcdir}/0001-BFQ-${_bfq}-v${pkgver}.patch"
 
   # Fix Nvidia 304xx issue
   # https://bugs.archlinux.org/task/47092
@@ -122,8 +121,8 @@ prepare() {
 
   # Deal with the Intel ASoC issue
   # https://github.com/manjaro/packages-core/issues/35
-  msg "revert-intel-asoc.patch"
-  patch -Rp1 -i "${srcdir}/revert-intel-asoc.patch"
+  #msg "revert-intel-asoc.patch"
+  #patch -Rp1 -i "${srcdir}/revert-intel-asoc.patch"
 
   msg "All patches have successfully been applied"
 
